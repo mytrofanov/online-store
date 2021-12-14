@@ -11,7 +11,7 @@ class DeviceController {
             let fileName = uuid.v4() + '.jpeg'
             img.mv(path.resolve(__dirname, '..', 'static', fileName))  //removes files to /static
 
-            const device = await Device.create({name, price, brandId, typeId, img:fileName})
+            const device = await Device.create({name, price, brandId, typeId, img: fileName})
             return res.json(device)
         } catch (e) {
             next(ApiError.badRequest(e.message))
@@ -20,6 +20,21 @@ class DeviceController {
     }
 
     async getAll(req, res) {
+        const {brandId, typeId} = req.query
+        let devices;
+        if (!brandId && !typeId) {
+            devices = await Device.findAll()
+        }
+        if (brandId && !typeId) {
+            devices = await Device.findAll({where:{brandId}})
+        }
+        if (!brandId && typeId) {
+            devices = await Device.findAll({where:{typeId}})
+        }
+        if (brandId && typeId) {
+            devices = await Device.findAll({where:{brandId, typeId}})
+        }
+        return res.json(devices)
 
     }
 
