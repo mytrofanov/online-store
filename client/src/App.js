@@ -1,11 +1,9 @@
-
-
 function App() {
-  return (
-    <div>
-Working
-    </div>
-  );
+    return (
+        <div>
+            Working
+        </div>
+    );
 }
 
 export default App;
