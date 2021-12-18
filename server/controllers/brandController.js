@@ -10,8 +10,6 @@ class BrandController {
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
-
-
     }
 
     async getAll(req, res) {
