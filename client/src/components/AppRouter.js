@@ -8,6 +8,7 @@ const AppRouter = () => {
     const isAuth = true
     return (
             <Routes>
+
                 <Route path='/' element={<Shop/>}/>
             </Routes>
 
