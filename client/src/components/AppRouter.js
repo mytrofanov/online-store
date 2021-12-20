@@ -1,12 +1,18 @@
 import React from 'react';
-import {Switch,Router, Redirect} from "react-router-dom";
+
+import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
+import {authRoutes, publicRoutes} from "../routes";
+import Shop from "../pages/Shop";
 
 const AppRouter = () => {
+    const isAuth = true
     return (
-        <div>
-           AppRouter
-        </div>
-    );
-};
+            <Routes>
+                <Route path='/' element={<Shop/>}/>
+            </Routes>
 
-export default AppRouter;
+
+            );
+            };
+
+            export default AppRouter;
