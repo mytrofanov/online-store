@@ -12,10 +12,10 @@ export default class UserStore {
     setUser(user) {
         this._user = user
     }
-    getIsAuth(){
+    get IsAuth(){
         return this._isAuth
     }
-    getUser(){
+    get User(){
         return this._user
     }
 

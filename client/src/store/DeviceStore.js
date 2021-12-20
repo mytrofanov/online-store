@@ -8,26 +8,34 @@ export default class DeviceStore {
         ]
         this._brands = [{id:1, name:'Samsung'},
             {id:2, name:'Apple'}]
-        this._device = [{
-
-        }]
+        this._device = [
+            {id:1, name:'Веб-камера A4Tech PK-930HA USB Black', rating:5, img:'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'},
+            {id:2, name:'Веб-камера A4Tech PK-930HA USB Black', rating:5, img:'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'},
+            {id:3, name:'Веб-камера A4Tech PK-930HA USB Black', rating:5, img:'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'},
+            {id:4, name:'Веб-камера A4Tech PK-930HA USB Black', rating:5, img:'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'}]
         makeAutoObservable(this)
     }
 
-    setIsAuth(bool) {
-        this._isAuth = bool
+    setTypes(types) {
+        this._types = types
     }
 
-    setUser(user) {
-        this._user = user
+    setBrands(brands) {
+        this._brands = brands
+    }
+    setDevices(devices) {
+        this._devices = devices
     }
 
-    getIsAuth() {
-        return this._isAuth
+    get Types() {
+        return this._types
     }
 
-    getUser() {
-        return this._user
+    get brands () {
+        return this._brands
+    }
+    get devices () {
+        return this._devices
     }
 
 
