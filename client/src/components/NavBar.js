@@ -12,15 +12,15 @@ const NavBar = observer( () => {
         <Navbar bg="dark" variant="dark">
             <Container>
 
-                <NavLink style={{color: "white", textDecoration: "none"}} to={SHOP_ROUTE}> Купи Девайс </NavLink>
+                <NavLink style={{color: "white", textDecoration: "none"}} to={SHOP_ROUTE}> Nice Device </NavLink>
                 {user._isAuth ?
                     <Nav className="ml-auto" style={{color: "white"}}>
-                        <Button variant="secondary">Админ панель</Button>
-                        <Button variant="secondary">Выйти</Button>
+                        <Button variant="secondary"  className="me-lg-2">Админ панель</Button>
+                        <Button variant="secondary" onClick={()=>{user.setIsAuth(false)}}>Выйти</Button>
                     </Nav>
                     :
                     <Nav className="ml-auto" style={{color: "white"}}>
-                    <Button variant="secondary">Авторизация</Button>
+                    <Button variant="secondary" onClick={()=>{user.setIsAuth(true)}}>Авторизация</Button>
 
                     </Nav>
                 }
