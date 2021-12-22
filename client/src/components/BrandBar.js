@@ -6,7 +6,7 @@ import {Card} from "react-bootstrap";
 const BrandBar = observer(() => {
     const {device} = useContext(Context)
     return (
-        <div className="d-flex flex-row">
+        <div className="d-flex flex-row flex-wrap">
             {device.brands.map(brand =>
                 <Card key={brand.id} className="m-2 p-2" style={{cursor: 'pointer'}}
                       onClick={() => device.setSelectedBrand(brand)}
