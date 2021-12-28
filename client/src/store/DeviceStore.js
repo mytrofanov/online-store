@@ -20,44 +20,52 @@ export default class DeviceStore {
                 id: 1,
                 name: 'Веб-камера A4Tech PK-930HA USB Black',
                 rating: 5,
+                price:1030,
                 img: 'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'
             },
             {
                 id: 2,
                 name: 'Веб-камера A4Tech PK-930HA USB Black',
                 rating: 5,
+                price:1030,
                 img: 'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'
             },
             {
                 id: 3,
                 name: 'Веб-камера A4Tech PK-930HA USB Black',
                 rating: 5,
+                price:1200,
                 img: 'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'
             },
             {
                 id: 4,
                 name: 'Веб-камера A4Tech PK-930HA USB Black',
                 rating: 5,
+                price:1000,
                 img: 'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'
             },{
                 id: 5,
                 name: 'Веб-камера A4Tech PK-930HA USB Black',
                 rating: 5,
+                price:1000,
                 img: 'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'
             },{
                 id: 6,
                 name: 'Веб-камера A4Tech PK-930HA USB Black',
                 rating: 5,
+                price:1000,
                 img: 'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'
             },{
                 id: 7,
                 name: 'Веб-камера A4Tech PK-930HA USB Black',
                 rating: 5,
+                price:1000,
                 img: 'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'
             },{
                 id: 8,
                 name: 'Веб-камера A4Tech PK-930HA USB Black',
                 rating: 5,
+                price:1100,
                 img: 'https://content1.rozetka.com.ua/goods/images/big/218996956.jpg'
             },
         ]
