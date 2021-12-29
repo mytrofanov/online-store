@@ -2,7 +2,8 @@ import React, {useContext} from 'react';
 import {Context} from "../index";
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
 import {ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE} from "../utils/consts";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
+import {useNavigate} from "react-router";
 import {observer} from "mobx-react-lite";
 
 
