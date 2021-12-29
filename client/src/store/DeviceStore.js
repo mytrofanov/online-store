@@ -94,7 +94,7 @@ export default class DeviceStore {
         this._selectedBrand = brand
     }
 
-    get Types() {
+    get types() {
         return this._types
     }
 
