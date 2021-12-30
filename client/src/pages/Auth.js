@@ -13,10 +13,10 @@ const Auth = () => {
     const click = async () => {
         if (isLogin) {
             const response = await login()
-            console.log('login: ' + response)
+
         } else {
-            const response = await registration(email,password)
-            console.log('registration: ' + response)
+            const response = await registration(email, password)
+            console.log(response)
         }
 
     }
@@ -27,13 +27,19 @@ const Auth = () => {
             <Card style={{width: 600}} className="p-5">
                 <h2 className="m-auto">{isLogin ? 'Авторизация' : 'Регистрация'}</h2>
                 <Form className="d-flex flex-column">
-                    <Form.Control className="mt-3" placeholder="Введите email" value={email}
-                                  onChange={(e) => {
-                                      setEmail(e.target.value)
-                                  }}
+                    <Form.Control
+                        className="mt-3"
+                        placeholder="Введите email"
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value)
+                        }}
                     />
-                    <Form.Control className="mt-3" placeholder="Введите пароль" type="password"
-                                  value={password} onChange={(e) => {
+                    <Form.Control
+                        className="mt-3"
+                        placeholder="Введите пароль"
+                        type="password"
+                        value={password} onChange={(e) => {
                         setPassword(e.target.value)
                     }}
                     />
@@ -48,7 +54,7 @@ const Auth = () => {
 
                         }
                         <Button className="mt-3" variant={"outline-success"}
-                        onClick={click}
+                                onClick={click}
                         >{
                             isLogin ? 'Войти' : 'Зарегистрироваться'}</Button>
                     </Row>

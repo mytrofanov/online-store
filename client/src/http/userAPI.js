@@ -1,14 +1,25 @@
 import {$authHost, $host} from "./index";
+import jwtDecode from "jwt-decode";
 
 export const registration = async (email, password) => {
-    const response = await $host.post('api/auth/registration', {email, password, role: 'ADMIN'})
-    return response
+    try {
+        const {data} = await $host.post('api/user/registration', {email, password, role: 'ADMIN'})
+        return jwtDecode(data.token)
+    } catch (e) {
+        console.log(e)
+    }
 }
 export const login = async (email, password) => {
-    const response = await $host.post('api/auth/login', {email, password})
-    return response
+    try {
+        const {data} = await $host.post('api/user/login', {email, password})
+        return jwtDecode(data.token)
+    } catch (e) {
+        console.log(e)
+    }
+
+
 }
 export const check = async () => {
-    const response = await $host.post('api/auth/registration')
+    const response = await $host.post('api/user/registration')
     return response
 }
