@@ -33,4 +33,28 @@ export const fetchBrands = async () => {
         console.log(e)
     }
 }
+export const createDevice = async (device) => {
+    try {
+        const {data} = await $authHost.post('api/device', device)
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const fetchDevices = async () => {
+    try {
+        const {data} = await $host.get('api/device' )
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const fetchOneDevice = async (id) => {
+    try {
+        const {data} = await $host.get('api/device/' + id )
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
 
