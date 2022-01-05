@@ -22,7 +22,30 @@ export const login = async (email, password) => {
 
 }
 export const check = async () => {
-    const {data} = await $authHost.post('api/user/auth')
-    localStorage.setItem('token', data.token)
-    return jwtDecode(data.token)
+    try {
+        const {data} = await $authHost.get('api/user/auth')
+            .catch(function (error) {
+                if (error.response) {
+                    const {message} = error.response.data
+                    const status = error.response.status
+                    if (status === 401) {
+                        console.log(message + ', status: ' + status)
+                    }
+                    console.log(error.response)
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.log("request:", error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log("Error-message:", error.message);
+                }
+            })
+        if (data.token) {
+            localStorage.setItem('token', data.token)
+            return jwtDecode(data.token)
+        }
+    } catch (e) {
+        console.log(e)
+    }
+
 }
