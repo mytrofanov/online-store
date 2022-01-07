@@ -53,7 +53,7 @@ export const fetchDevices = async (typeId, brandId, page, limit = 5) => {
 }
 export const fetchOneDevice = async (id) => {
     try {
-        const {data} = await $host.get('api/device/' + id )
+        const {data} = id !== undefined && await $host.get('api/device/' + id )
         return data
     } catch (e) {
         console.log(e)

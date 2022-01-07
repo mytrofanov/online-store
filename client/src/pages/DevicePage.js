@@ -1,21 +1,25 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Image, Row, Spinner} from "react-bootstrap";
 import star from '../img/Five-pointed_star.svg'
+import noImage from '../img/no-image.png'
 import {useParams} from "react-router";
 import {fetchOneDevice} from "../http/deviceAPI";
 
 const DevicePage = () => {
-    const [device, setDevices] = useState({info:[]})
+    const [device, setDevices] = useState({info: []})
     const {id} = useParams()
 
-    useEffect(()=>{
-    fetchOneDevice(id).then(data=>setDevices(data))
-    },[])
+    useEffect(() => {
+        fetchOneDevice(id).then(data => setDevices(data))
+    }, [])
+
+    const imageOfDevice = (device.img === undefined) ? noImage : process.env.REACT_APP_API_URL + device.img
+
     return (
         <Container className="mt-3">
             <Row>
                 <Col md={4}>
-                    <Image width={300} height={300} src={process.env.REACT_APP_API_URL + device.img}/>
+                    <Image width={300} height={300} src={imageOfDevice}/>
                 </Col>
                 <Col md={4}>
                     <Row className="d-flex flex-column align-items-center">
