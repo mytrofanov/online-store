@@ -11,14 +11,16 @@ const App = observer( () => {
     const {user} = useContext(Context)
     const [loading, setLoading] = useState(true)
     useEffect(()=>{
-        check().then(data=>{
-            if (data !== undefined) {
-                user.setUser(true)
-                user.setIsAuth(true)
-            }
-
-        })
-            .finally(()=>setLoading(false))
+        if (user.triedToLogin === true) {
+            check().then(data=>{
+                if (data !== undefined) {
+                    user.setUser(true)
+                    user.setIsAuth(true)
+                }
+            })
+                .finally(()=>setLoading(false))
+        }
+        setLoading(false)
     },[])
 
 
