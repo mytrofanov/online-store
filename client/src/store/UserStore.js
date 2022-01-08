@@ -3,7 +3,7 @@ import {makeAutoObservable} from "mobx";
 export default class UserStore {
     constructor() {
         this._isAuth = false
-        this._triedToLogin = false  //need not to make check request of user status
+        this._triedToLogin = false  //needed not to make check request of user status
         this._user = {}
         makeAutoObservable(this)
     }
@@ -16,7 +16,7 @@ export default class UserStore {
     setUser(user) {
         this._user = user
     }
-    get IsAuth(){
+    get isAuth(){
         return this._isAuth
     }
     get triedToLogin(){

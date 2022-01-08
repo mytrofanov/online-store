@@ -21,7 +21,7 @@ const NavBar = observer(() => {
             <Container>
 
                 <NavLink style={{color: "white", textDecoration: "none"}} to={SHOP_ROUTE}> Nice Device </NavLink>
-                {user._isAuth ?
+                {user.isAuth ?
                     <Nav className="ml-auto" style={{color: "white"}}>
                         <Button variant="secondary"
                                 className="me-lg-2"

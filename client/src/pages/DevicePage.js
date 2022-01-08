@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, Container, Image, Row, Spinner} from "react-bootstrap";
+import React, {useContext, useEffect, useState} from 'react';
+import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
 import star from '../img/Five-pointed_star.svg'
 import noImage from '../img/no-image.png'
 import {useParams} from "react-router";
 import {fetchOneDevice} from "../http/deviceAPI";
+import {Context} from "../index";
 
 const DevicePage = () => {
     const [device, setDevices] = useState({info: []})
     const {id} = useParams()
+    const {user} = useContext(Context)
 
     useEffect(() => {
         fetchOneDevice(id).then(data => setDevices(data))
@@ -41,6 +43,10 @@ const DevicePage = () => {
                           style={{width: 300, height: 300, fontSize: 32, border: '5px solid lightgray'}}>
                         <h3>{device.price} грн.</h3>
                         <Button variant={"outline-dark"}>Добавить в корзину</Button>
+                        {user.isAuth && <div>
+                            <Button variant={"outline-dark"}>Удалить товар</Button>
+                        </div>
+                            }
                     </Card>
                 </Col>
             </Row>
