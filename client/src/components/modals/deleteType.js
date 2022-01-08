@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {Button, ListGroup, Modal} from "react-bootstrap";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
@@ -22,7 +22,7 @@ const DeleteType = observer(({show, onHide}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <ListGroup>
+                <ListGroup >
                     {device.types.map(type =>
                         <ListGroup.Item key={type.id}
                                         style={{cursor: 'pointer'}}
@@ -39,7 +39,7 @@ const DeleteType = observer(({show, onHide}) => {
                 </ListGroup>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="outline" onClick={onHide}>Закрыть</Button>
+                <Button variant="outline-success" onClick={onHide}>Закрыть</Button>
                 <Button variant="outline-danger" onClick={onHide}>Удалить</Button>
 
             </Modal.Footer>

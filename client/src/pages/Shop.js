@@ -19,7 +19,7 @@ const Shop = observer(() => {
         })
     }, [])
     useEffect(()=>{
-        fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, 10).then(data => {
+        fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit).then(data => {
             device.setDevices(data.rows)
             device.setTotalCount(data.count)
     })
