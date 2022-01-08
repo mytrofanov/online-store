@@ -1,10 +1,15 @@
 import React, {useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import {ListGroup} from "react-bootstrap";
+import {Button, ListGroup} from "react-bootstrap";
 
 const TypeBar = observer(() => {
     const {device} = useContext(Context)
+    const clearFilters = () => {
+        device.setSelectedType({})
+        device.setSelectedBrand({})
+    }
+
     return (
         <ListGroup>
             {device.types.map(type =>
@@ -19,7 +24,12 @@ const TypeBar = observer(() => {
                 </ListGroup.Item>
             )
             }
+            <Button onClick={() => {
+                clearFilters()
+            }}
+            >Сбросить все фильтры</Button>
         </ListGroup>
+
     );
 });
 
