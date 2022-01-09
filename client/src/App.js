@@ -14,6 +14,7 @@ const App = observer( () => {
         if (user.triedToLogin === true) {
             check().then(data=>{
                 if (data !== undefined) {
+                    console.log(data)
                     user.setUser(true)
                     user.setIsAuth(true)
                 }

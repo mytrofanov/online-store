@@ -21,6 +21,10 @@ const Auth = observer(() => {
             let data;
             if (isLogin) {
                 data = await login(email,password)
+                if (data.role === "ADMIN") {
+                    user.setIsAdmin(true)
+                }
+
 
             } else {
                 data = await registration(email, password, role)
@@ -58,7 +62,7 @@ const Auth = observer(() => {
                         setPassword(e.target.value)
                     }}
                     />
-                    {user.isAuth && <Form.Control
+                    {user.isAdmin && <Form.Control
                             className="mt-3"
                             placeholder="Ваша роль"
                             type="text"

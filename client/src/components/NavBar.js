@@ -10,9 +10,10 @@ import {observer} from "mobx-react-lite";
 const NavBar = observer(() => {
     const {user} = useContext(Context)
     const navigate = useNavigate()
-    const logOut = () =>{
+    const logOut = () => {
         user.setUser({})
         user.setIsAuth(false)
+        user.setIsAdmin(false)
         user.setTriedToLogin(false)
     }
 
@@ -21,7 +22,7 @@ const NavBar = observer(() => {
             <Container>
 
                 <NavLink style={{color: "white", textDecoration: "none"}} to={SHOP_ROUTE}> Nice Device </NavLink>
-                {user.isAuth ?
+                {user.isAdmin &&
                     <Nav className="ml-auto" style={{color: "white"}}>
                         <Button variant="secondary"
                                 className="me-lg-2"
@@ -29,19 +30,19 @@ const NavBar = observer(() => {
                                     navigate(ADMIN_ROUTE)
                                 }}
                         >Админ панель</Button>
-                        <Button variant="secondary" className="me-lg-2"
-                                onClick={() => navigate(LOGIN_ROUTE)
-                        }>Авторизация</Button>
+                    </Nav>}
+                {user.isAuth &&
+                    <Nav className="ml-auto" style={{color: "white"}}>
                         <Button variant="secondary" onClick={() => logOut()
                         }>Выйти</Button>
                     </Nav>
-                    :
-                    <Nav className="ml-auto" style={{color: "white"}}>
-                        <Button variant="secondary" onClick={() => navigate(LOGIN_ROUTE)
-                        }>Авторизация</Button>
-
-                    </Nav>
                 }
+                <Nav className="ml-auto" style={{color: "white"}}>
+                    <Button variant="secondary" className="me-lg-2"
+                            onClick={() => navigate(LOGIN_ROUTE)
+                            }>Авторизация</Button>
+
+                </Nav>
 
             </Container>
         </Navbar>
