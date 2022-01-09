@@ -18,7 +18,7 @@ const InfoModal = ({show, onHide, infoMessage}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {infoMessage}
+                {infoMessage || 'No answer from server'}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-success" onClick={onHide}>Закрыть</Button>
