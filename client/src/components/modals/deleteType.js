@@ -1,11 +1,15 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Button, ListGroup, Modal} from "react-bootstrap";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
-import {deleteType} from "../../http/deviceAPI";
+import {deleteType, fetchTypes} from "../../http/deviceAPI";
 
 const DeleteType = observer(({show, onHide, setInfoToShow,setInfoVisible}) => {
     const {device} = useContext(Context)
+    useEffect(() => {
+        fetchTypes().then(data => device.setTypes(data))
+    }, [device.types])
+
     const delType = (name) => {
         deleteType({name: name}).then(data =>
             setInfoToShow(data.message)
@@ -14,6 +18,7 @@ const DeleteType = observer(({show, onHide, setInfoToShow,setInfoVisible}) => {
         setInfoVisible(true)
     }
    const name = device.selectedType.name
+
 
     return (
         <Modal

@@ -54,7 +54,10 @@ const Admin = () => {
             <CreateBrand show={brandVisible} onHide={()=>{setBrandVisible(false)}}/>
             <DeleteBrand setInfoToShow={setInfoToShow}
                          show={delBrandVisible} onHide={()=>{setDelBrandVisible(false)}}/>
-            <CreateType show={typeVisible} onHide={()=>{setTypeVisible(false)}}/>
+            <CreateType show={typeVisible}
+                        setInfoToShow={setInfoToShow}
+                        setInfoVisible={setInfoVisible}
+                        onHide={()=>{setTypeVisible(false)}}/>
             <DeleteType show={deleteTypeVisible}
                         setInfoToShow={setInfoToShow}
                         setInfoVisible={setInfoVisible}
