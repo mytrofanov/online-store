@@ -6,21 +6,33 @@ import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
 import {login, registration} from "../http/userAPI";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
+import InfoModal from "../components/modals/infoModal";
 
 const Auth = observer(() => {
     const {user} = useContext(Context)
+    const {info} = useContext(Context)
     const location = useLocation()
     const history = useNavigate()
-    const isLogin = location.pathname === LOGIN_ROUTE
+    const isLoginPath = location.pathname === LOGIN_ROUTE
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [role, setRole] = useState('USER')
 
+    const condition = () => {
+        if (info.info.length > 1) {
+            info.setInfoVisible(true)
+        }
+        if (info.infoVisible === false) {
+            info.setInfo('')
+            history(SHOP_ROUTE)
+        }
+    }
+
     const click = async () => {
-        try{
+        try {
             let data;
-            if (isLogin) {
-                data = await login(email,password)
+            if (isLoginPath) {
+                data = await login(email, password)
                 if (data.role === "ADMIN") {
                     user.setIsAdmin(true)
                 }
@@ -28,15 +40,27 @@ const Auth = observer(() => {
 
             } else {
                 data = await registration(email, password, role)
+                if (data.id !== undefined) {
+                    info.setInfo('Новый пользователь с адресом: ' + data.email + ' зарегистрирован!')
+                    condition()
+
+                }
+                if (data.id === undefined) {
+                    info.setInfo('Что-то пошло не так ...')
+                    condition()
+                }
             }
             user.setUser(user)
             user.setIsAuth(true)
             user.setTriedToLogin(true)
-            history(SHOP_ROUTE)
-        }catch (e) {
-            alert(e.response.data.message)
+            if (isLoginPath) {
+                history(SHOP_ROUTE)
+            }
+        } catch (e) {
+            console.log(e.response)
+
         }
-        }
+    }
 
 
 
@@ -44,7 +68,7 @@ const Auth = observer(() => {
         <Container className="d-flex justify-content-center align-items-center"
                    style={{height: window.innerHeight - 54}}>
             <Card style={{width: 600}} className="p-5">
-                <h2 className="m-auto">{isLogin ? 'Авторизация' : 'Регистрация'}</h2>
+                <h2 className="m-auto">{isLoginPath ? 'Авторизация' : 'Регистрация'}</h2>
                 <Form className="d-flex flex-column">
                     <Form.Control
                         className="mt-3"
@@ -63,19 +87,18 @@ const Auth = observer(() => {
                     }}
                     />
                     {user.isAdmin && <Form.Control
-                            className="mt-3"
-                            placeholder="Ваша роль"
-                            type="text"
-                            value={role} onChange={(e) => {
-                            setRole(e.target.value)
-                        }}
-                        />
+                        className="mt-3"
+                        placeholder="Ваша роль"
+                        type="text"
+                        value={role} onChange={(e) => {
+                        setRole(e.target.value)
+                    }}
+                    />
                     } {/*only Admin should see this field*/}
 
 
-
                     <Row className="d-flex justify-content-between p-lg-3">
-                        {isLogin ? <div>
+                        {isLoginPath ? <div>
                                 Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
                             </div>
                             : <div>
@@ -86,12 +109,17 @@ const Auth = observer(() => {
                         <Button className="mt-3" variant={"outline-success"}
                                 onClick={click}
                         >{
-                            isLogin ? 'Войти' : 'Зарегистрироваться'}</Button>
+                            isLoginPath ? 'Войти' : 'Зарегистрироваться'}</Button>
                     </Row>
 
                 </Form>
             </Card>
-
+            <InfoModal show={info.infoVisible}
+                       infoMessage={info.info}
+                       onHide={() => {
+                           info.setInfoVisible(false)
+                           history(SHOP_ROUTE)
+                       }}/> {/*shows the result of any action*/}
         </Container>
     );
 });
