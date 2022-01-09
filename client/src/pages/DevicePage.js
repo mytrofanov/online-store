@@ -44,7 +44,8 @@ const DevicePage = () => {
                         <h3>{device.price} грн.</h3>
                         <Button variant={"outline-dark"}>Добавить в корзину</Button>
                         {user.isAuth && <div>
-                            <Button variant={"outline-dark"}>Удалить товар</Button>
+                            <Button variant={"outline-danger"}>Удалить товар</Button>
+                            <Button variant={"outline-success"}>Редактировать параметры товара</Button>
                         </div>
                             }
                     </Card>
