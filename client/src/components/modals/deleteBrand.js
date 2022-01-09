@@ -3,7 +3,7 @@ import {Button, Card,  Modal} from "react-bootstrap";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 
-const DeleteBrand = observer(({show, onHide}) => {
+const DeleteBrand = observer(({show, onHide, setInfoToShow}) => {
 
     const {device} = useContext(Context)
 

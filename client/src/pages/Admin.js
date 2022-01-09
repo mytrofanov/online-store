@@ -6,6 +6,7 @@ import CreateDevice from "../components/modals/createDevice";
 import DeleteType from "../components/modals/deleteType";
 import * as PropTypes from "prop-types";
 import DeleteBrand from "../components/modals/deleteBrand";
+import InfoModal from "../components/modals/infoModal";
 
 function DeleteTypeBrand() {
     return null;
@@ -21,6 +22,8 @@ const Admin = () => {
     let [typeVisible, setTypeVisible] = useState(false)
     let [deleteTypeVisible, setDelTypeVisible] = useState(false)
     let [deviceVisible, setDeviceVisible] = useState(false)
+    let [infoVisible, setInfoVisible] = useState(false)
+    let [infoToShow, setInfoToShow] = useState('')
 
     return (
         <Container className="d-flex flex-column">
@@ -49,11 +52,18 @@ const Admin = () => {
 
 
             <CreateBrand show={brandVisible} onHide={()=>{setBrandVisible(false)}}/>
-            <DeleteBrand show={delBrandVisible} onHide={()=>{setDelBrandVisible(false)}}/>
+            <DeleteBrand setInfoToShow={setInfoToShow}
+                         show={delBrandVisible} onHide={()=>{setDelBrandVisible(false)}}/>
             <CreateType show={typeVisible} onHide={()=>{setTypeVisible(false)}}/>
-            <DeleteType show={deleteTypeVisible} onHide={()=>{setDelTypeVisible(false)}}/>
+            <DeleteType show={deleteTypeVisible}
+                        setInfoToShow={setInfoToShow}
+                        setInfoVisible={setInfoVisible}
+                        onHide={()=>{setDelTypeVisible(false)}}/>
             <CreateDevice show={deviceVisible} onHide={()=>{setDeviceVisible(false)}}/>
 
+            <InfoModal show={infoVisible}
+                       infoMessage = {infoToShow}
+                       onHide={()=>{setInfoVisible(false)}}/>    {/*shows the result of any action*/}
         </Container>
     );
 };
