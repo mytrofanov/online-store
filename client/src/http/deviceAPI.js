@@ -33,6 +33,14 @@ export const createBrand = async (brand) => {
         console.log(e)
     }
 }
+export const deleteBrand = async (brand) => {
+    try {
+        const {data} = await $authHost.post('api/brand/del', brand)
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
 export const fetchBrands = async () => {
     try {
         const {data} = await $host.get('api/brand',)
