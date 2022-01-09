@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {Button, ListGroup, Modal} from "react-bootstrap";
+import {Alert, Button, ListGroup, Modal} from "react-bootstrap";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 import {deleteType, fetchTypes} from "../../http/deviceAPI";
@@ -31,6 +31,10 @@ const DeleteType = observer(({show, onHide, setInfoToShow,setInfoVisible}) => {
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
                    Удалить тип
+                    <Alert  variant="danger">
+                        Внимание! При удалении типа все связанные с ним товары станут недоступны в режиме фильтр!
+                        Каждому товару из удаленной категории нужно будет присвоить новый тип!
+                    </Alert>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
