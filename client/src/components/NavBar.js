@@ -22,28 +22,32 @@ const NavBar = observer(() => {
             <Container>
 
                 <NavLink style={{color: "white", textDecoration: "none"}} to={SHOP_ROUTE}> Nice Device </NavLink>
-                {user.isAdmin &&
-                    <Nav className="ml-auto" style={{color: "white"}}>
-                        <Button variant="secondary"
-                                className="me-lg-2"
-                                onClick={() => {
-                                    navigate(ADMIN_ROUTE)
-                                }}
-                        >Админ панель</Button>
-                    </Nav>}
-                {user.isAuth &&
-                    <Nav className="ml-auto" style={{color: "white"}}>
+                <Nav className="ml-auto" style={{color: "white"}}>
+                    {user.isAdmin &&
+                        <>
+                            <Button variant="secondary"
+                                    className="me-lg-2"
+                                    onClick={() => {
+                                        navigate(ADMIN_ROUTE)
+                                    }}
+                            >Админ панель</Button>
+                            <Button variant="secondary" className="me-lg-2"
+                                    onClick={() => navigate(LOGIN_ROUTE)
+                                    }>Авторизация</Button>
+                        </>
+
+
+                    }
+                    {user.isAuth &&
                         <Button variant="secondary" onClick={() => logOut()
                         }>Выйти</Button>
-                    </Nav>
-                }
-                <Nav className="ml-auto" style={{color: "white"}}>
-                    <Button variant="secondary" className="me-lg-2"
-                            onClick={() => navigate(LOGIN_ROUTE)
-                            }>Авторизация</Button>
-
+                    }
+                    {!user.isAuth &&
+                        <Button variant="secondary" className="me-lg-2"
+                                onClick={() => navigate(LOGIN_ROUTE)
+                                }>Авторизация</Button>
+                    }
                 </Nav>
-
             </Container>
         </Navbar>
     );
