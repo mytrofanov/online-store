@@ -11,7 +11,7 @@ class TypeController {
     async delete (req, res, next) {
         const {name} = req.body
         const type = await Type.destroy({where:{name}})
-        return next(ApiError.success('Type was deleted'))
+        return next(ApiError.success('Тип товара удален'))
     }
     async getAll (req, res) {
         const types = await Type.findAll()
