@@ -19,11 +19,11 @@ const Auth = observer(() => {
     const [role, setRole] = useState('USER')
 
     const condition = () => {
-        if (info.info.length > 1) {
-            info.setInfoVisible(true)
+        if (info.infoAuth.length > 1) {
+            info.setInfoAuthVisible(true)
         }
-        if (info.infoVisible === false) {
-            info.setInfo('')
+        if (info.infoAuthVisible === false) {
+            info.setInfoAuth('')
             history(SHOP_ROUTE)
         }
     }
@@ -41,12 +41,12 @@ const Auth = observer(() => {
             } else {
                 data = await registration(email, password, role)
                 if (data.id !== undefined) {
-                    info.setInfo('Новый пользователь с адресом: ' + data.email + ' зарегистрирован!')
+                    info.setInfoAuth('Новый пользователь с адресом: ' + data.email + ' зарегистрирован!')
                     condition()
 
                 }
                 if (data.id === undefined) {
-                    info.setInfo('Что-то пошло не так ...')
+                    info.setInfoAuth('Что-то пошло не так ...')
                     condition()
                 }
             }
@@ -57,7 +57,7 @@ const Auth = observer(() => {
                 history(SHOP_ROUTE)
             }
         } catch (e) {
-            console.log(e.response)
+            console.log(e)
 
         }
     }
@@ -114,10 +114,10 @@ const Auth = observer(() => {
 
                 </Form>
             </Card>
-            <InfoModal show={info.infoVisible}
-                       infoMessage={info.info}
+            <InfoModal show={info.infoAuthVisible}
+                       infoMessage={info.infoAuth}
                        onHide={() => {
-                           info.setInfoVisible(false)
+                           info.setInfoAuthVisible(false)
                            history(SHOP_ROUTE)
                        }}/> {/*shows the result of any action*/}
         </Container>

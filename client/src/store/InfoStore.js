@@ -2,23 +2,23 @@ import {makeAutoObservable} from "mobx";
 
 export default class InfoStore {
     constructor() {
-        this._info = ''
-        this._infoVisible = false
+        this._infoAuth = ''
+        this._infoAuthVisible = false
         makeAutoObservable(this)
     }
-    setInfo(info) {
-        this._info = info
+    setInfoAuth(info) {
+        this._infoAuth = info
     }
 
-    get info(){
-        return this._info
+    get infoAuth(){
+        return this._infoAuth
     }
-   setInfoVisible(bool) {
-        this._infoVisible = bool
+   setInfoAuthVisible(bool) {
+        this._infoAuthVisible = bool
     }
 
-    get infoVisible(){
-        return this._infoVisible
+    get infoAuthVisible(){
+        return this._infoAuthVisible
     }
 
 }
