@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Modal} from "react-bootstrap";
 
 const InfoModal = ({show, onHide, infoMessage}) => {
-
+    const info = infoMessage === undefined ? 'No data from server' : infoMessage
 
     return (
         <Modal
@@ -18,7 +18,7 @@ const InfoModal = ({show, onHide, infoMessage}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {infoMessage || 'No answer from server'}
+                {info}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-success" onClick={onHide}>Закрыть</Button>

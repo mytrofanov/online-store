@@ -4,7 +4,7 @@ import {Context} from "../../index";
 import {createDevice, fetchBrands, fetchTypes} from "../../http/deviceAPI";
 import {observer} from "mobx-react-lite";
 
-const CreateDevice = observer(({show, onHide}) => {
+const CreateDevice = observer(({show, onHide, setInfoToShow,setInfoVisible }) => {
     const {device} = useContext(Context)
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
@@ -35,8 +35,12 @@ const CreateDevice = observer(({show, onHide}) => {
         try {
             createDevice(formData).then(data => {
                 onHide()
-                console.log('устройство добавлено')
+                if (data.id !== undefined) {
+                    setInfoToShow('Новый товар добавлен')
+                } else  setInfoToShow('Нет ответа от сервера')
+
             })
+            setInfoVisible(true)
         } catch (e) {
             console.log(e)
         }

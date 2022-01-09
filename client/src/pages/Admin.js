@@ -66,7 +66,10 @@ const Admin = () => {
                         setInfoToShow={setInfoToShow}
                         setInfoVisible={setInfoVisible}
                         onHide={()=>{setDelTypeVisible(false)}}/>
-            <CreateDevice show={deviceVisible} onHide={()=>{setDeviceVisible(false)}}/>
+            <CreateDevice show={deviceVisible}
+                          setInfoToShow={setInfoToShow}
+                          setInfoVisible={setInfoVisible}
+                          onHide={()=>{setDeviceVisible(false)}}/>
 
             <InfoModal show={infoVisible}
                        infoMessage = {infoToShow}
