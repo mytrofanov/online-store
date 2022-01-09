@@ -26,7 +26,15 @@ class DeviceController {
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
-
+    }
+    async delete(req, res, next) {
+        try {
+            let {id} = req.body
+            const device = await Device.destroy({where: {id}})
+            return next(ApiError.success('Товар удален'))
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
     }
 
     async getAll(req, res) {
