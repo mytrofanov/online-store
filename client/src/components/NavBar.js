@@ -29,6 +29,9 @@ const NavBar = observer(() => {
                                     navigate(ADMIN_ROUTE)
                                 }}
                         >Админ панель</Button>
+                        <Button variant="secondary" className="me-lg-2"
+                                onClick={() => navigate(LOGIN_ROUTE)
+                        }>Авторизация</Button>
                         <Button variant="secondary" onClick={() => logOut()
                         }>Выйти</Button>
                     </Nav>

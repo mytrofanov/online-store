@@ -14,6 +14,7 @@ const Auth = observer(() => {
     const isLogin = location.pathname === LOGIN_ROUTE
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [role, setRole] = useState('USER')
 
     const click = async () => {
         try{
@@ -22,7 +23,7 @@ const Auth = observer(() => {
                 data = await login(email,password)
 
             } else {
-                data = await registration(email, password)
+                data = await registration(email, password, role)
             }
             user.setUser(user)
             user.setIsAuth(true)
@@ -57,6 +58,17 @@ const Auth = observer(() => {
                         setPassword(e.target.value)
                     }}
                     />
+                    {user.isAuth && <Form.Control
+                            className="mt-3"
+                            placeholder="Ваша роль"
+                            type="text"
+                            value={role} onChange={(e) => {
+                            setRole(e.target.value)
+                        }}
+                        />
+                    } {/*only Admin should see this field*/}
+
+
 
                     <Row className="d-flex justify-content-between p-lg-3">
                         {isLogin ? <div>
