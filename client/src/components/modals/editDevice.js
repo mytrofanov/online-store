@@ -1,8 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Col, Dropdown, Form, Modal, Row} from "react-bootstrap";
+import {Button, Col, Dropdown, Form, Image, Modal, Row} from "react-bootstrap";
 import {Context} from "../../index";
 import {createDevice, fetchBrands, fetchOneDevice, fetchTypes} from "../../http/deviceAPI";
 import {observer} from "mobx-react-lite";
+import noImage from "../../img/no-image.png";
 
 const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const {device} = useContext(Context)
@@ -11,10 +12,18 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const [price, setPrice] = useState(0)
     const [file, setFile] = useState(null)
     const [info, setInfo] = useState([])
-
+    const imageOfDevice = (file === undefined) ? noImage : process.env.REACT_APP_API_URL + file
     useEffect(() => {
-        fetchOneDevice(oneDeviceId).then(data => setEditedDevice(data))
+        fetchOneDevice(oneDeviceId).then(data => {
+            console.log(data)
+            setEditedDevice(data)
+            setPrice(data.price)
+            setName(data.name)
+            setFile(data.img)
+            setInfo(data.info)
+        })
     }, [])
+
 
     const addInfo = () => {
         setInfo([...info, {title: '', description: '', number: Date.now()}])
@@ -59,16 +68,22 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
         fetchBrands().then(data => device.setBrands(data))
     }, [])
 
-    console.log(editedDevice)
-    let typeNow
-    const typeForEdit = device.types.map(type=> {
+
+    let typeBeforeEditing
+    let brandBeforeEditing
+    device.types.map(type=> {
             if (type.id === editedDevice.typeId) {
-                return typeNow = type.name
+                return typeBeforeEditing = type.name
             }
         }
-
     )
-    console.log(typeNow)
+    device.brands.map(brand=> {
+            if (brand.id === editedDevice.brandId) {
+                return brandBeforeEditing = brand.name
+            }
+        }
+    )
+
     return (
         <Modal
             show={show}
@@ -84,7 +99,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             <Modal.Body>
                 <Form>
                     <Dropdown className="mt-2 mb-2">
-                        <Dropdown.Toggle>{device.selectedType.name || typeNow}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{device.selectedType.name || typeBeforeEditing}</Dropdown.Toggle>
                         <Dropdown.Menu>
                             {device.types.map(type =>
                                 <Dropdown.Item onClick={() => {
@@ -94,7 +109,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                         </Dropdown.Menu>
                     </Dropdown>
                     <Dropdown>
-                        <Dropdown.Toggle>{device.selectedBrand.name || "Выберите бренд"}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{device.selectedBrand.name || brandBeforeEditing}</Dropdown.Toggle>
                         <Dropdown.Menu>
                             {device.brands.map(brand =>
                                 <Dropdown.Item onClick={() => {
@@ -103,27 +118,37 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                             )}
                         </Dropdown.Menu>
                     </Dropdown>
+                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                    <Form.Label column sm="2">Название</Form.Label>
+                        <Col sm="10">
                     <Form.Control
                         className="mt-3"
-                        placeholder={name}
+                        placeholder={editedDevice.name}
                         value={name}
                         onChange={e =>
                             setName(e.target.value)
                         }
                     />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                        <Form.Label column sm="2">Цена</Form.Label>
+                        <Col sm="10">
                     <Form.Control
                         className="mt-3"
-                        placeholder={price}
+                        placeholder={editedDevice.price}
                         value={price}
                         onChange={e =>
                             setPrice(Number(e.target.value))
                         }
                         type="number"
                     />
+                        </Col>
+                    </Form.Group>
                     <h6 className="mt-3">
                         Загрузите изображение устройства:
                     </h6>
-
+                    <Image height={100}  src={imageOfDevice}/>
                     <Form.Control
                         className="mt-3"
                         type="file"
@@ -134,8 +159,8 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                         variant={"outline-dark"}
                         onClick={addInfo}
                     >Добавить новое свойство</Button>
-                    {info.map((i) =>
-                        <Row className="mt-3" key={i.number}>
+                    {info.map((i,index) =>
+                        <Row className="mt-3" key={i.createdAt + index}>
                             <Col md={4}>
                                 <Form.Control
                                     value={i.title}
