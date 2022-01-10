@@ -60,9 +60,15 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     }, [])
 
     console.log(editedDevice)
+    let typeNow
+    const typeForEdit = device.types.map(type=> {
+            if (type.id === editedDevice.typeId) {
+                return typeNow = type.name
+            }
+        }
 
-
-
+    )
+    console.log(typeNow)
     return (
         <Modal
             show={show}
@@ -78,7 +84,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             <Modal.Body>
                 <Form>
                     <Dropdown className="mt-2 mb-2">
-                        <Dropdown.Toggle>{device.selectedType.name || "Выберите тип"}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{device.selectedType.name || typeNow}</Dropdown.Toggle>
                         <Dropdown.Menu>
                             {device.types.map(type =>
                                 <Dropdown.Item onClick={() => {
