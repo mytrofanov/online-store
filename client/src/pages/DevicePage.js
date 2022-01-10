@@ -6,9 +6,11 @@ import {useNavigate, useParams} from "react-router";
 import {deleteDevice, fetchOneDevice} from "../http/deviceAPI";
 import {Context} from "../index";
 import {SHOP_ROUTE} from "../utils/consts";
+import EditDevice from "../components/modals/editDevice";
 
 const DevicePage = () => {
     const [oneDevice, setOneDevices] = useState({info: []})
+    const [editVisible, setEditVisible] = useState(false)
     const {id} = useParams()
     const {user} = useContext(Context)
     const {info} = useContext(Context)
@@ -18,10 +20,8 @@ const DevicePage = () => {
         fetchOneDevice(id).then(data => setOneDevices(data))
     }, [])
 
-
-
-    const delDevice = (oneDeviceId) => {
-        deleteDevice({id:oneDeviceId}).then(data => {
+     const delDevice = (oneDeviceId) => {
+        deleteDevice({id: oneDeviceId}).then(data => {
                 info.setInfoShop(data.message)
                 info.setInfoShopVisible(true)
             }
@@ -31,7 +31,8 @@ const DevicePage = () => {
 
 
     const imageOfDevice = (oneDevice.img === undefined) ? noImage : process.env.REACT_APP_API_URL + oneDevice.img
-    const oneDeviceId = oneDevice.id
+
+
     return (
         <Container className="mt-3">
             <Row>
@@ -60,11 +61,15 @@ const DevicePage = () => {
                         <Button variant={"outline-dark"}>Добавить в корзину</Button>
                         {user.isAuth && <div>
                             <Button variant={"outline-danger"}
-                            onClick={()=>{delDevice(oneDeviceId)}}
+                                    onClick={() => {
+                                        delDevice(id)
+                                    }}
                             >Удалить товар</Button>
-                            <Button variant={"outline-success"}>Редактировать параметры товара</Button>
+                            <Button variant={"outline-success"}
+                            onClick={()=>{setEditVisible(true)}}
+                            >Редактировать параметры товара</Button>
                         </div>
-                            }
+                        }
                     </Card>
                 </Col>
             </Row>
@@ -77,6 +82,13 @@ const DevicePage = () => {
                     </Row>
                 )}
             </Row>
+
+            <EditDevice show={editVisible}
+                        oneDeviceId={id}
+                        onHide={() => {
+                            setEditVisible(false)
+                        }}/>
+
 
         </Container>
     );
