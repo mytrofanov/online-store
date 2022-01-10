@@ -11,6 +11,7 @@ const DevicePage = () => {
     const [oneDevice, setOneDevices] = useState({info: []})
     const {id} = useParams()
     const {user} = useContext(Context)
+    const {info} = useContext(Context)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,8 +21,10 @@ const DevicePage = () => {
 
 
     const delDevice = (oneDeviceId) => {
-        deleteDevice({id:oneDeviceId}).then(data =>
-        console.log(data)
+        deleteDevice({id:oneDeviceId}).then(data => {
+                info.setInfoShop(data.message)
+                info.setInfoShopVisible(true)
+            }
         )
         navigate(SHOP_ROUTE)
     }
@@ -74,6 +77,7 @@ const DevicePage = () => {
                     </Row>
                 )}
             </Row>
+
         </Container>
     );
 

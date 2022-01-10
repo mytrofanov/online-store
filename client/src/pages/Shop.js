@@ -7,9 +7,11 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import {fetchBrands, fetchDevices, fetchTypes} from "../http/deviceAPI";
 import Pages from "../components/pages";
+import InfoModal from "../components/modals/infoModal";
 
 const Shop = observer(() => {
     const {device} = useContext(Context)
+    const {info} = useContext(Context)
     useEffect(() => {
         fetchTypes().then(data => device.setTypes(data))
         fetchBrands().then(data => device.setBrands(data))
@@ -18,12 +20,12 @@ const Shop = observer(() => {
             device.setTotalCount(data.count)
         })
     }, [])
-    useEffect(()=>{
+    useEffect(() => {
         fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit).then(data => {
             device.setDevices(data.rows)
             device.setTotalCount(data.count)
-    })
-    }, [device.page, device.selectedType, device.selectedBrand, ])
+        })
+    }, [device.page, device.selectedType, device.selectedBrand,])
 
     return (
         <Container>
@@ -38,6 +40,13 @@ const Shop = observer(() => {
                 </Col>
 
             </Row>
+
+            <InfoModal show={info.infoShopVisible}
+                       infoMessage={info.infoShop}
+                       onHide={() => {
+                           info.setInfoShopVisible(false)
+                           info.setInfoShop('')
+                       }}/> {/*shows the result of any action*/}
         </Container>
     );
 });
