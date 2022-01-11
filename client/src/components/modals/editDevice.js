@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Col, Dropdown, Form, Image, Modal, Row} from "react-bootstrap";
 import {Context} from "../../index";
-import {createDevice, fetchBrands, fetchOneDevice, fetchTypes} from "../../http/deviceAPI";
+import {fetchBrands, fetchOneDevice, fetchTypes} from "../../http/deviceAPI";
 import {observer} from "mobx-react-lite";
 import noImage from "../../img/no-image.png";
 
@@ -12,10 +12,11 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const [price, setPrice] = useState(0)
     const [file, setFile] = useState(null)
     const [info, setInfo] = useState([])
+    const [changeFile, setChangeFile] = useState(false)
     const imageOfDevice = (file === undefined) ? noImage : process.env.REACT_APP_API_URL + file
+
     useEffect(() => {
         fetchOneDevice(oneDeviceId).then(data => {
-            console.log(data)
             setEditedDevice(data)
             setPrice(data.price)
             setName(data.name)
@@ -32,36 +33,42 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
         setInfo(info.filter(i => i.number !== number))
     }
     const changeInfo = (key, value, number) => {
-        setInfo(info.map(i => i.number === number ? {...i, [key]: value} : i))
+        console.log('changeInfo:', 'key:',key, 'value:', value, 'number:',number)
+        setInfo(info.map(i => i.id === number ? {...i, [key]: value} : i))
+    }
+    const changeInfoTitle = (key, value, number) => {
+        console.log('changeInfo:', 'key:',key, 'value:', value, 'number:',number)
+        setInfo(info.map(i => i.id === number ? {...i, [key]: value} : i))
     }
 
     const selectFile = e => {
         setFile(e.target.files[0])
+        setChangeFile(true)
     }
-    const addDevice = () => {
-        const formData = new FormData()
-        formData.append('name', name)
-        formData.append('price', `${price}`)
-        formData.append('img', file)
-        formData.append('brandId', device.selectedBrand.id)
-        formData.append('typeId', device.selectedType.id)
-        formData.append('info', JSON.stringify(info))
-
-        try {
-            createDevice(formData).then(data => {
-                onHide()
-                if (data.id !== undefined) {
-                    console.log('Изменения внесены')
-                } else console.log('Нет ответа от сервера')
-
-            })
-
-        } catch (e) {
-            console.log(e)
-        }
-
-
-    }
+    // const addDevice = () => {
+    //     const formData = new FormData()
+    //     formData.append('name', name)
+    //     formData.append('price', `${price}`)
+    //     formData.append('img', file)
+    //     formData.append('brandId', device.selectedBrand.id)
+    //     formData.append('typeId', device.selectedType.id)
+    //     formData.append('info', JSON.stringify(info))
+    //
+    //     try {
+    //         createDevice(formData).then(data => {
+    //             onHide()
+    //             if (data.id !== undefined) {
+    //                 console.log('Изменения внесены')
+    //             } else console.log('Нет ответа от сервера')
+    //
+    //         })
+    //
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    //
+    //
+    // }
 
     useEffect(() => {
         fetchTypes().then(data => device.setTypes(data))
@@ -148,7 +155,9 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                     <h6 className="mt-3">
                         Загрузите изображение устройства:
                     </h6>
-                    <Image height={100}  src={imageOfDevice}/>
+                    {!changeFile ? <Image height={100}  src={imageOfDevice}/> :
+                        'Просмотр изображений будет возможен после сохранения изменений'}
+
                     <Form.Control
                         className="mt-3"
                         type="file"
@@ -159,13 +168,13 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                         variant={"outline-dark"}
                         onClick={addInfo}
                     >Добавить новое свойство</Button>
-                    {info.map((i,index) =>
-                        <Row className="mt-3" key={i.createdAt + index}>
+                    {info.map((i) =>
+                        <Row className="mt-3" key={ Date.now() + Math.random()}>
                             <Col md={4}>
                                 <Form.Control
                                     value={i.title}
                                     onChange={(e) => {
-                                        changeInfo('title', e.target.value, i.number)
+                                        changeInfoTitle('title', e.target.value, i.id)
                                     }}
                                     placeholder="Введите название свойства"
                                 />
@@ -174,7 +183,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                                 <Form.Control
                                     value={i.description}
                                     onChange={(e) => {
-                                        changeInfo('description', e.target.value, i.number)
+                                        changeInfo('description', e.target.value, i.id)
                                     }}
                                     placeholder="Введите описание свойства"
                                 />
