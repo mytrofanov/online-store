@@ -31,16 +31,7 @@ class DeviceController {
     async update(req, res, next) {
         try {
             let {id, name, price, brandId, typeId, info} = req.body
-            const {img} = req.files
-            let fileName = uuid.v4() + '.jpeg'
-            const oldImg = await Device.findOne(
-                {where: {img}
-                }
-            )
-            if (oldImg.img !== img) {
-                img.mv(path.resolve(__dirname, '..', 'static', fileName))  //removes files to /static
-            }
-            const device = await Device.update({name, price, brandId, typeId, img: fileName},
+            const device = await Device.update({name, price, brandId, typeId},
                 {where: {id}})
             if (info) {
                 info = JSON.parse(info)
@@ -48,12 +39,12 @@ class DeviceController {
                     DeviceInfo.update({
                         title: i.title,
                         description: i.description,
-                        deviceId: device.id
-                    }, {where:{deviceId:device.id}})
+                        deviceId: id
+                    }, {where: {deviceId: id}})
                 )
             }
 
-            return res.json(device)
+            return next(ApiError.success('Изменения внесены'))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }

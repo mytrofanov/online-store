@@ -57,6 +57,14 @@ export const createDevice = async (device) => {
         console.log(e)
     }
 }
+export const updateDevice = async (device) => {
+    try {
+        const {data} = await $authHost.post('api/device/update', device)
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
 export const deleteDevice = async (id) => {
     try {
         const {data} = await $authHost.post('api/device/del', id)

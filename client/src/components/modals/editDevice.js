@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Col, Dropdown, Form, Image, Modal, Row} from "react-bootstrap";
 import {Context} from "../../index";
-import {fetchBrands, fetchOneDevice, fetchTypes} from "../../http/deviceAPI";
+import {fetchBrands, fetchOneDevice, fetchTypes, updateDevice} from "../../http/deviceAPI";
 import {observer} from "mobx-react-lite";
 import noImage from "../../img/no-image.png";
 
@@ -22,7 +22,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             setName(data.name)
             setFile(data.img)
             setInfo(data.info)
-            console.log(data.info)
+
         })
     }, [])
 
@@ -33,11 +33,8 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const removeInfo = (number) => {
         setInfo(info.filter(i => i.number !== number))
     }
+
     const changeInfo = (key, value, number) => {
-        console.log('changeInfo:', 'key:',key, 'value:', value, 'number:',number)
-        setInfo(info.map(i => i.id === number ? {...i, [key]: value} : i))
-    }
-    const changeInfoTitle = (key, value, number) => {
         console.log('changeInfo:', 'key:',key, 'value:', value, 'number:',number)
         setInfo(info.map(i => i.id === number ? {...i, [key]: value} : i))
     }
@@ -46,30 +43,28 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
         setFile(e.target.files[0])
         setChangeFile(true)
     }
-    // const addDevice = () => {
-    //     const formData = new FormData()
-    //     formData.append('name', name)
-    //     formData.append('price', `${price}`)
-    //     formData.append('img', file)
-    //     formData.append('brandId', device.selectedBrand.id)
-    //     formData.append('typeId', device.selectedType.id)
-    //     formData.append('info', JSON.stringify(info))
-    //
-    //     try {
-    //         createDevice(formData).then(data => {
-    //             onHide()
-    //             if (data.id !== undefined) {
-    //                 console.log('Изменения внесены')
-    //             } else console.log('Нет ответа от сервера')
-    //
-    //         })
-    //
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    //
-    //
-    // }
+    const sendUpdatedDevice = () => {
+        const formData = new FormData()
+        formData.append('id', editedDevice.id)
+        formData.append('name', name)
+        formData.append('price', `${price}`)
+        formData.append('img', file)
+        formData.append('brandId', device.selectedBrand.id || editedDevice.brandId)
+        formData.append('typeId', device.selectedType.id || editedDevice.typeId)
+        formData.append('info', JSON.stringify(info))
+
+        try {
+            updateDevice(formData).then(data => {
+                onHide()
+                console.log(data)
+
+            })
+        } catch (e) {
+            console.log(e)
+        }
+
+
+    }
 
     useEffect(() => {
         fetchTypes().then(data => device.setTypes(data))
@@ -175,7 +170,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                                 <Form.Control
                                     value={i.title}
                                     onChange={(e) => {
-                                        changeInfoTitle('title', e.target.value, i.id)
+                                        changeInfo('title', e.target.value, i.id)
                                     }}
                                     placeholder="Введите название свойства"
                                 />
@@ -205,7 +200,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-danger" onClick={onHide}>Закрыть</Button>
-                <Button variant="outline-success" onClick={onHide}>Сохранить изменения</Button>
+                <Button variant="outline-success" onClick={sendUpdatedDevice}>Сохранить изменения</Button>
             </Modal.Footer>
         </Modal>
     )
