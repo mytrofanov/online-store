@@ -13,14 +13,29 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const [price, setPrice] = useState(0)
     const [file, setFile] = useState(null)
     const [info, setInfo] = useState([])
+    const [infoFromForm, setInfoFromForm] = useState({})
 
     const [infoToSend, setInfoToSend] = useState([])
     const [changeFile, setChangeFile] = useState(false)
     const onSubmit = data => {
         console.log(data);
-
+        setInfoFromForm(data)
     }
+    console.log('infoFromForm:')
+    console.log(infoFromForm)
+    console.log(info)
+    function arrayCreator(obj) {
+        let counter = 0
 
+        for (let key in obj){
+            if (/^[\d:]*$/.test(key)) { console.log('id:' + key + ' title: ' + obj[key])}
+            if (/d:/.test(key)) { console.log('id: ' + key.slice(2) + ' description: ' + obj[key])}
+
+
+        }
+        // console.log('Количество свойств в объекте '+ counter)
+    }
+    arrayCreator(infoFromForm)
 
 
     const imageOfDevice = (file === undefined) ? noImage : process.env.REACT_APP_API_URL + file
