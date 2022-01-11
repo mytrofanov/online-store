@@ -92,3 +92,11 @@ export const fetchOneDevice = async (id) => {
     }
 }
 
+export const updateInfo = async (info) => {
+    try {
+        const {data} = await $authHost.post('api/device/updateInfo', info)
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}

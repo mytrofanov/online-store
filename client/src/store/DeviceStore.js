@@ -5,6 +5,7 @@ export default class DeviceStore {
         this._types = []
         this._brands = []
         this._devices = []
+        this._info = []
         this._selectedType = {}
         this._selectedBrand = {}
         this._page = 1
@@ -24,6 +25,13 @@ export default class DeviceStore {
 
     setDevices(devices) {
         this._devices = devices
+    }
+
+    setInfo(info){
+        this._info = info
+    }
+    get info() {
+        return this._info
     }
 
     setSelectedType(type) {

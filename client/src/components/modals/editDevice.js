@@ -1,9 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Col, Dropdown, Form, Image, Modal, Row} from "react-bootstrap";
 import {Context} from "../../index";
-import {fetchBrands, fetchOneDevice, fetchTypes, updateDevice} from "../../http/deviceAPI";
+import {fetchBrands, fetchOneDevice, fetchTypes, updateDevice, updateInfo} from "../../http/deviceAPI";
 import {observer} from "mobx-react-lite";
 import noImage from "../../img/no-image.png";
+import InfoForm from "../InfoForm";
 
 const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const {device} = useContext(Context)
@@ -12,7 +13,10 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const [price, setPrice] = useState(0)
     const [file, setFile] = useState(null)
     const [info, setInfo] = useState([])
+
+    const [infoToSend, setInfoToSend] = useState([])
     const [changeFile, setChangeFile] = useState(false)
+    const onSubmit = data => console.log(data);
     const imageOfDevice = (file === undefined) ? noImage : process.env.REACT_APP_API_URL + file
 
     useEffect(() => {
@@ -22,22 +26,27 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             setName(data.name)
             setFile(data.img)
             setInfo(data.info)
-            console.log(data.info)
+
         })
     }, [])
 
 
-    const addInfo = () => {
-        setInfo([...info, {title: '', description: '', number: Date.now()}])
-    }
-    const removeInfo = (number) => {
-        setInfo(info.filter(i => i.number !== number))
-    }
+    // const addInfo = () => {
+    //     setInfo([...info, {title: '', description: '', number: Date.now()}])
+    // }
+    // const removeInfo = (number) => {
+    //     setInfo(info.filter(i => i.number !== number))
+    // }
 
-    const changeInfo = (key, value, number) => {
-        console.log('changeInfo:', 'key:',key, 'value:', value, 'number:',number)
-        setInfo(info.map(i => i.id === number ? {...i, [key]: value} : i))
-    }
+    // const changeInfo = (key, value, id) => {
+    //     console.log('changeInfo:', 'key:',key, 'value:', value, 'id:',id)
+    //     setInfo(info.map(i => i.id === id ? {...i, [key]: value} : i))
+    // }
+
+    // const changeInfo = (key, value, id) => {
+    //     console.log('changeInfo:', 'key:',key, 'value:', value, 'id:',id)
+    //     setInfo(info.map(i => i.id === id ? {...i, [key]: value} : i))
+    // }
 
     const selectFile = e => {
         setFile(e.target.files[0])
@@ -48,22 +57,31 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
         formData.append('id', editedDevice.id)
         formData.append('name', name)
         formData.append('price', `${price}`)
-        formData.append('img', file)
         formData.append('brandId', device.selectedBrand.id || editedDevice.brandId)
         formData.append('typeId', device.selectedType.id || editedDevice.typeId)
-        formData.append('info', JSON.stringify(info))
-
         try {
             updateDevice(formData).then(data => {
                 onHide()
-                console.log(data)
-
             })
         } catch (e) {
             console.log(e)
         }
+    }
+    const sendUpdatedInfo = (id) => {
+        const formData = new FormData()
+        formData.append('id', id )
+        formData.append('title', infoToSend.name)
+        formData.append('description', infoToSend.description)
+        formData.append('deviceId', editedDevice.id)
 
-
+        try {
+            updateInfo(formData).then(data => {
+                onHide()
+                console.log(data)
+            })
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     useEffect(() => {
@@ -162,41 +180,11 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                     <hr/>
                     <Button
                         variant={"outline-dark"}
-                        onClick={addInfo}
+                        onClick={()=>{}}
                     >Добавить новое свойство</Button>
-                    {info.map((i) =>
-                        <Row className="mt-3" key={ Date.now() + Math.random()}>
-                            <Col md={4}>
-                                <Form.Control
-                                    value={i.title}
-                                    onChange={(e) => {
-                                        changeInfo('title', e.target.value, i.id)
-                                    }}
-                                    placeholder="Введите название свойства"
-                                />
-                            </Col>
-                            <Col md={4}>
-                                <Form.Control
-                                    value={i.description}
-                                    onChange={(e) => {
-                                        changeInfo('description', e.target.value, i.id)
-                                    }}
-                                    placeholder="Введите описание свойства"
-                                />
-                            </Col>
-                            <Col md={4}>
-                                <Button variant={"outline-danger"}
-                                        onClick={() => {
-                                            removeInfo(i.number)
-                                        }}
-                                >
-                                    Удалить свойство
-                                </Button>
-                            </Col>
-                        </Row>
-                    )
-                    }
+
                 </Form>
+                <InfoForm info = {info} setInfo={setInfo} onSubmit={onSubmit}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-danger" onClick={onHide}>Закрыть</Button>
