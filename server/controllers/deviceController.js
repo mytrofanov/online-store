@@ -2,6 +2,7 @@ const uuid = require('uuid')
 const path = require('path')
 const {Device, DeviceInfo} = require('../models/models')
 const ApiError = require('../error/ApiError')
+const {where} = require("sequelize");
 
 class DeviceController {
     async create(req, res, next) {
@@ -30,26 +31,15 @@ class DeviceController {
 
     async update(req, res, next) {
         try {
-            let {id, name, price, brandId, typeId, info} = req.body
+            let {id, name, price, brandId, typeId} = req.body
             const device = await Device.update({name, price, brandId, typeId},
                 {where: {id}})
-            if (info) {
-                info = JSON.parse(info)
-                info.forEach(i =>
-                    DeviceInfo.update({
-                        title: i.title,
-                        description: i.description,
-                        deviceId: id
-                    }, {where: {deviceId: id}})
-                )
-            }
 
             return next(ApiError.success('Изменения внесены'))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
     }
-
     async delete(req, res, next) {
         try {
             let {id} = req.body
@@ -93,6 +83,34 @@ class DeviceController {
         )
         return res.json(device)
     }
+
+
+    // infoControllers
+
+    async updateInfo(req, res, next) {
+        try {
+            let {id, title, description, deviceId} = req.body
+            if (id) {
+              await DeviceInfo.update(
+                    {title, description, deviceId}, {where:{id}}
+                )
+                return next(ApiError.success('Изменения в инфо о товаре внесены'))
+            }
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
+    }
+    async deleteInfo(req, res, next) {
+        try {
+            let {id} = req.body
+            await DeviceInfo.destroy({where: {id}})
+            return next(ApiError.success('Описание товара удалено'))
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
+    }
+
+
 
 }
 
