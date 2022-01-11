@@ -16,7 +16,13 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
 
     const [infoToSend, setInfoToSend] = useState([])
     const [changeFile, setChangeFile] = useState(false)
-    const onSubmit = data => console.log(data);
+    const onSubmit = data => {
+        console.log(data);
+
+    }
+
+
+
     const imageOfDevice = (file === undefined) ? noImage : process.env.REACT_APP_API_URL + file
 
     useEffect(() => {
