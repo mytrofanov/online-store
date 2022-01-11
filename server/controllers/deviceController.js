@@ -14,11 +14,11 @@ class DeviceController {
             if (info) {
                 info = JSON.parse(info)
                 info.forEach(i =>
-                DeviceInfo.create({
-                    title: i.title,
-                    description: i.description,
-                    deviceId: device.id
-                })
+                    DeviceInfo.create({
+                        title: i.title,
+                        description: i.description,
+                        deviceId: device.id
+                    })
                 )
             }
 
@@ -27,6 +27,38 @@ class DeviceController {
             next(ApiError.badRequest(e.message))
         }
     }
+
+    async update(req, res, next) {
+        try {
+            let {id, name, price, brandId, typeId, info} = req.body
+            const {img} = req.files
+            let fileName = uuid.v4() + '.jpeg'
+            const oldImg = await Device.findOne(
+                {where: {img}
+                }
+            )
+            if (oldImg.img !== img) {
+                img.mv(path.resolve(__dirname, '..', 'static', fileName))  //removes files to /static
+            }
+            const device = await Device.update({name, price, brandId, typeId, img: fileName},
+                {where: {id}})
+            if (info) {
+                info = JSON.parse(info)
+                info.forEach(i =>
+                    DeviceInfo.update({
+                        title: i.title,
+                        description: i.description,
+                        deviceId: device.id
+                    }, {where:{deviceId:device.id}})
+                )
+            }
+
+            return res.json(device)
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
+    }
+
     async delete(req, res, next) {
         try {
             let {id} = req.body
@@ -45,16 +77,16 @@ class DeviceController {
 
         let devices;
         if (!brandId && !typeId) {
-            devices = await Device.findAndCountAll({limit,offset})
+            devices = await Device.findAndCountAll({limit, offset})
         }
         if (brandId && !typeId) {
-            devices = await Device.findAndCountAll({where:{brandId}, limit, offset})
+            devices = await Device.findAndCountAll({where: {brandId}, limit, offset})
         }
         if (!brandId && typeId) {
-            devices = await Device.findAndCountAll({where:{typeId}, limit, offset})
+            devices = await Device.findAndCountAll({where: {typeId}, limit, offset})
         }
         if (brandId && typeId) {
-            devices = await Device.findAndCountAll({where:{brandId, typeId}, limit, offset})
+            devices = await Device.findAndCountAll({where: {brandId, typeId}, limit, offset})
         }
         return res.json(devices)
 
@@ -62,13 +94,15 @@ class DeviceController {
 
     async getOne(req, res) {
         const {id} = req.params
-        const device = await Device.findOne (
-            {where: {id},
-            include:[{model: DeviceInfo, as: 'info'}]
+        const device = await Device.findOne(
+            {
+                where: {id},
+                include: [{model: DeviceInfo, as: 'info'}]
             }
         )
         return res.json(device)
     }
+
 }
 
 module.exports = new DeviceController()

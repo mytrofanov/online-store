@@ -22,6 +22,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             setName(data.name)
             setFile(data.img)
             setInfo(data.info)
+            console.log(data.info)
         })
     }, [])
 
