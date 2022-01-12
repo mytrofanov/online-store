@@ -89,17 +89,22 @@ class DeviceController {
 
     async updateInfo(req, res, next) {
         try {
-            let {id, title, description, deviceId} = req.body
-            if (id) {
-              await DeviceInfo.update(
-                    {title, description, deviceId}, {where:{id}}
+            let {info} = req.body
+            if (info) {
+                info = JSON.parse(info)
+                info.forEach(i =>
+                    DeviceInfo.update({
+                        title: i.title,
+                        description: i.description
+                    }, {where:{id:i.id}})
                 )
                 return next(ApiError.success('Изменения в инфо о товаре внесены'))
-            }
+            } else return next(ApiError.success('В заголовке запроса нет info'))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
     }
+
     async deleteInfo(req, res, next) {
         try {
             let {id} = req.body
