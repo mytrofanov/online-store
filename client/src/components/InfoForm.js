@@ -1,10 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import {Button} from "react-bootstrap";
 
 export default function InfoForm({info, onSubmit}) {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
      return (
+
         /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
         <form onSubmit={handleSubmit(onSubmit)}>
             {info.map(i=>
@@ -17,7 +19,7 @@ export default function InfoForm({info, onSubmit}) {
 
             )}
 
-            <input type="submit" />
+            <Button type="submit" variant="outline-success" style={{marginTop:15}}>Сохранить изменения</Button>
         </form>
     );
 }

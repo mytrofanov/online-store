@@ -7,10 +7,12 @@ import {deleteDevice, fetchOneDevice} from "../http/deviceAPI";
 import {Context} from "../index";
 import {SHOP_ROUTE} from "../utils/consts";
 import EditDevice from "../components/modals/editDevice";
+import EditDeviceInfo from "../components/modals/editDeviceInfo";
 
 const DevicePage = () => {
     const [oneDevice, setOneDevices] = useState({info: []})
     const [editVisible, setEditVisible] = useState(false)
+    const [editInfoVisible, setEditInfoVisible] = useState(false)
     const {id} = useParams()
     const {user} = useContext(Context)
     const {info} = useContext(Context)
@@ -18,7 +20,7 @@ const DevicePage = () => {
 
     useEffect(() => {
         fetchOneDevice(id).then(data => setOneDevices(data))
-    }, [editVisible])
+    }, [editVisible,editInfoVisible])
 
      const delDevice = (oneDeviceId) => {
         deleteDevice({id: oneDeviceId}).then(data => {
@@ -59,7 +61,7 @@ const DevicePage = () => {
                           style={{width: 300, height: 300, fontSize: 32, border: '5px solid lightgray'}}>
                         <h3>{oneDevice.price} грн.</h3>
                         <Button variant={"outline-dark"}>Добавить в корзину</Button>
-                        {user.isAuth && <div>
+                        {user.isAdmin && <div>
                             <Button variant={"outline-danger"}
                                     onClick={() => {
                                         delDevice(id)
@@ -68,6 +70,10 @@ const DevicePage = () => {
                             <Button variant={"outline-success"}
                             onClick={()=>{setEditVisible(true)}}
                             >Редактировать параметры товара</Button>
+
+                            <Button variant={"outline-success"}
+                            onClick={()=>{setEditInfoVisible(true)}}
+                            >Изменить характеристики товара</Button>
                         </div>
                         }
                     </Card>
@@ -87,6 +93,12 @@ const DevicePage = () => {
                         oneDeviceId={id}
                         onHide={() => {
                             setEditVisible(false)
+                        }}/>
+
+            <EditDeviceInfo show={editInfoVisible}
+                        oneDeviceId={id}
+                        onHide={() => {
+                            setEditInfoVisible(false)
                         }}/>
 
 
