@@ -18,12 +18,11 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const [infoToSend, setInfoToSend] = useState([])
     const [changeFile, setChangeFile] = useState(false)
     const onSubmit = data => {
-        console.log(data);
         setInfoFromForm(data)
+        arrayCreator(infoFromForm)
+        sendUpdatedInfo()
     }
-    console.log('infoFromForm:')
-    console.log(infoFromForm)
-    console.log(info)
+
 
     function arrayCreator(obj) {
         let array = []
@@ -44,16 +43,14 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             if (/d:/.test(key)) {
                 let tempKey = Number(key.slice(2))
                 for (let i = 0; i < array.length; i++) {
-                    if (typeof(tempKey) === "number" && tempKey == array[i][0].id) {
+                    if (typeof (tempKey) === "number" && tempKey == array[i][0].id) {
                         array[i][0]['description'] = obj[key]
                     }
                 }
             }
         }
-        console.log(array)
+        setInfoToSend(array)
     }
-
-    arrayCreator(infoFromForm)
 
 
     const imageOfDevice = (file === undefined) ? noImage : process.env.REACT_APP_API_URL + file
@@ -106,12 +103,9 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             console.log(e)
         }
     }
-    const sendUpdatedInfo = (id) => {
+    const sendUpdatedInfo = () => {
         const formData = new FormData()
-        formData.append('id', id)
-        formData.append('title', infoToSend.name)
-        formData.append('description', infoToSend.description)
-        formData.append('deviceId', editedDevice.id)
+        formData.append('info', JSON.stringify(infoToSend))
 
         try {
             updateInfo(formData).then(data => {
