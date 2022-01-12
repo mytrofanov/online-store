@@ -24,17 +24,35 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     console.log('infoFromForm:')
     console.log(infoFromForm)
     console.log(info)
+
     function arrayCreator(obj) {
+        let array = []
         let counter = 0
+        let id
+        let title = ''
 
-        for (let key in obj){
-            if (/^[\d:]*$/.test(key)) { console.log('id:' + key + ' title: ' + obj[key])}
-            if (/d:/.test(key)) { console.log('id: ' + key.slice(2) + ' description: ' + obj[key])}
-
-
+        for (let key in obj) {
+            if (/^[\d:]*$/.test(key)) {
+                id = Number(key)
+                title = obj[key]
+                array.push([{'id': id, 'title': title}])
+                counter++
+            }
         }
-        // console.log('Количество свойств в объекте '+ counter)
+        for (let key in obj) {
+
+            if (/d:/.test(key)) {
+                let tempKey = Number(key.slice(2))
+                for (let i = 0; i < array.length; i++) {
+                    if (typeof(tempKey) === "number" && tempKey == array[i][0].id) {
+                        array[i][0]['description'] = obj[key]
+                    }
+                }
+            }
+        }
+        console.log(array)
     }
+
     arrayCreator(infoFromForm)
 
 
@@ -90,7 +108,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     }
     const sendUpdatedInfo = (id) => {
         const formData = new FormData()
-        formData.append('id', id )
+        formData.append('id', id)
         formData.append('title', infoToSend.name)
         formData.append('description', infoToSend.description)
         formData.append('deviceId', editedDevice.id)
@@ -113,13 +131,13 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
 
     let typeBeforeEditing
     let brandBeforeEditing
-    device.types.map(type=> {
+    device.types.map(type => {
             if (type.id === editedDevice.typeId) {
                 return typeBeforeEditing = type.name
             }
         }
     )
-    device.brands.map(brand=> {
+    device.brands.map(brand => {
             if (brand.id === editedDevice.brandId) {
                 return brandBeforeEditing = brand.name
             }
@@ -161,36 +179,36 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                         </Dropdown.Menu>
                     </Dropdown>
                     <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                    <Form.Label column sm="2">Название</Form.Label>
+                        <Form.Label column sm="2">Название</Form.Label>
                         <Col sm="10">
-                    <Form.Control
-                        className="mt-3"
-                        placeholder={editedDevice.name}
-                        value={name}
-                        onChange={e =>
-                            setName(e.target.value)
-                        }
-                    />
+                            <Form.Control
+                                className="mt-3"
+                                placeholder={editedDevice.name}
+                                value={name}
+                                onChange={e =>
+                                    setName(e.target.value)
+                                }
+                            />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                         <Form.Label column sm="2">Цена</Form.Label>
                         <Col sm="10">
-                    <Form.Control
-                        className="mt-3"
-                        placeholder={editedDevice.price}
-                        value={price}
-                        onChange={e =>
-                            setPrice(Number(e.target.value))
-                        }
-                        type="number"
-                    />
+                            <Form.Control
+                                className="mt-3"
+                                placeholder={editedDevice.price}
+                                value={price}
+                                onChange={e =>
+                                    setPrice(Number(e.target.value))
+                                }
+                                type="number"
+                            />
                         </Col>
                     </Form.Group>
                     <h6 className="mt-3">
                         Загрузите изображение устройства:
                     </h6>
-                    {!changeFile ? <Image height={100}  src={imageOfDevice}/> :
+                    {!changeFile ? <Image height={100} src={imageOfDevice}/> :
                         'Просмотр изображений будет возможен после сохранения изменений'}
 
                     <Form.Control
@@ -201,11 +219,12 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                     <hr/>
                     <Button
                         variant={"outline-dark"}
-                        onClick={()=>{}}
+                        onClick={() => {
+                        }}
                     >Добавить новое свойство</Button>
 
                 </Form>
-                <InfoForm info = {info} setInfo={setInfo} onSubmit={onSubmit}/>
+                <InfoForm info={info} setInfo={setInfo} onSubmit={onSubmit}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-danger" onClick={onHide}>Закрыть</Button>

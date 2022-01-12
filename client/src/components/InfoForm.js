@@ -8,7 +8,7 @@ export default function InfoForm({info, onSubmit}) {
         /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
         <form onSubmit={handleSubmit(onSubmit)}>
             {info.map(i=>
-            <div>
+            <div key={i.id }>
                 <input key={i.id + i.title} defaultValue={i.title}
                        {...register(`${i.id}`)}/>
                 <input key={i.id + i.description} defaultValue={i.description}
