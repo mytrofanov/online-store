@@ -32,7 +32,7 @@ class DeviceController {
     async update(req, res, next) {
         try {
             let {id, name, price, brandId, typeId} = req.body
-            const device = await Device.update({name, price, brandId, typeId},
+            await Device.update({name, price, brandId, typeId},
                 {where: {id}})
 
             return next(ApiError.success('Изменения внесены'))
@@ -43,7 +43,7 @@ class DeviceController {
     async delete(req, res, next) {
         try {
             let {id} = req.body
-            const device = await Device.destroy({where: {id}})
+            await Device.destroy({where: {id}})
             return next(ApiError.success('Товар удален'))
         } catch (e) {
             next(ApiError.badRequest(e.message))
@@ -86,6 +86,26 @@ class DeviceController {
 
 
     // infoControllers
+
+    async createInfo(req, res, next) {
+        try {
+            let {info, deviceId} = req.body
+            if (info && deviceId) {
+                info = JSON.parse(info)
+                info.forEach(i =>
+                    DeviceInfo.create({
+                        title: i.title,
+                        description: i.description,
+                        deviceId: deviceId
+                    })
+                )
+                return next(ApiError.success('Новые характеристики товара добавлены'))
+            } else  return next(ApiError.success('info=' + info + ' ,deviceId =' + deviceId))
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
+    }
+
 
     async updateInfo(req, res, next) {
         try {
