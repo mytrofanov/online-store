@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
+import {createInfo} from "../../http/deviceAPI";
 
 const AddDeviceInfo = ({show, onHide, oneDeviceId}) => {
     let [newInfo, setNewInfo] = useState([])
@@ -18,7 +19,7 @@ const AddDeviceInfo = ({show, onHide, oneDeviceId}) => {
     const sendNewInfo = (array, deviceId) => {
         array.length < 1 && console.log('данные для отправки отсутствуют')
         !deviceId && console.log('Нет deviceId')
-        if (array.length > 0) {
+        if (array.length > 0 && deviceId) {
             const formData = new FormData()
             formData.append('info', JSON.stringify(array))
             formData.append('deviceId', deviceId)

@@ -100,3 +100,11 @@ export const updateInfo = async (info) => {
         console.log(e)
     }
 }
+export const createInfo = async (info) => {
+    try {
+        const {data} = await $authHost.post('api/device/createInfo', info)
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
