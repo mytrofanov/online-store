@@ -6,8 +6,16 @@ export default class UserStore {
         this._isAdmin = false
         this._triedToLogin = false  //needed not to make check request of user status
         this._user = {}
+        this._userId = null
         makeAutoObservable(this)
     }
+    setUserId (id) {
+        this._userId = id
+    }
+    get userId(){
+        return this._userId
+    }
+
     setIsAuth(bool) {
         this._isAuth = bool
     }

@@ -5,18 +5,11 @@ const {where} = require("sequelize");
 class BasketController {
     async putInBasket(req, res, next) {
         try {
-            let {deviceId, basketId, manyDevices} = req.body
-            const basket = await BasketDevice.create({deviceId, basketId})
-            if (manyDevices) {
-                manyDevices = JSON.parse(manyDevices)
-                manyDevices.forEach(i =>
-                    BasketDevice.create({
-                        deviceId: i.deviceId,
-                        basketId: i.basketId
-                    })
-                )
-            }
-            return res.json(basket)
+            let {deviceId, basketId} = req.body
+            if(deviceId && basketId) {
+                const basket = await BasketDevice.create({deviceId, basketId})
+                return next(ApiError.success('Товар с Id: ' + deviceId + 'добавлен в корзину'))
+            } else return next(ApiError.success('в запросе отсутствует deviceId и basketId '))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
@@ -41,13 +34,14 @@ class BasketController {
             next(ApiError.badRequest(e.message))
         }
     }
-
-    async getBasket(req, res) {
+    async getBasket(req, res, next) {
         const {basketId} = req.body
-        const basket = await BasketDevice.findAll({where:{basketId}})
-        return res.json(basket)
-    }
+        if (basketId) {
+            const basket = await BasketDevice.findAll({where:{basketId}})
+            return res.json(basket)
+        } else return next(ApiError.success('в запросе отсутствует Id корзины. Id=' + basketId))
 
+    }
 }
 
 module.exports = new BasketController()

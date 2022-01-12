@@ -4,8 +4,15 @@ export default class BasketStore {
     constructor() {
         this._basketVisible = false
         this._basketDevices = []
-
+        this._askForBasket = false
         makeAutoObservable(this)
+    }
+
+    setAskForBasket(bool) {
+        this._askForBasket = bool
+    }
+    get askForBasket() {
+        return this._askForBasket
     }
 
     setBasketVisible(bool) {

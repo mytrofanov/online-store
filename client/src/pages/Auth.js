@@ -31,16 +31,20 @@ const Auth = observer(() => {
     const click = async () => {
         try {
             let data;
+
             if (isLoginPath) {
                 data = await login(email, password)
                 if (data.role === "ADMIN") {
                     user.setIsAdmin(true)
                 }
-
+                if (data.id) {
+                    user.setUserId(data.id)
+                }
 
             } else {
                 data = await registration(email, password, role)
                 if (data.id !== undefined) {
+                    user.setUserId(data.id)
                     info.setInfoAuth('Новый пользователь с адресом: ' + data.email + ' зарегистрирован!')
                     condition()
 
@@ -61,7 +65,6 @@ const Auth = observer(() => {
 
         }
     }
-
 
 
     return (
