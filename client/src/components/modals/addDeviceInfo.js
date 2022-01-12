@@ -26,8 +26,8 @@ const AddDeviceInfo = ({show, onHide, oneDeviceId}) => {
             try {
                 createInfo(formData).then(data => {
                     onHide()
-                    console.log('ответ сервера:')
-                    console.log(data)
+                    // console.log('ответ сервера:')
+                    // console.log(data)
                 })
             } catch (e) {
                 console.log(e)
