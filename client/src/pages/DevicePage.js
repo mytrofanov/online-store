@@ -22,7 +22,7 @@ const DevicePage = () => {
 
     useEffect(() => {
         fetchOneDevice(id).then(data => setOneDevices(data))
-    }, [editVisible,editInfoVisible])
+    }, [editVisible,editInfoVisible,infoAddVisible])
 
      const delDevice = (oneDeviceId) => {
         deleteDevice({id: oneDeviceId}).then(data => {
