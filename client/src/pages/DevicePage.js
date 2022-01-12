@@ -8,11 +8,13 @@ import {Context} from "../index";
 import {SHOP_ROUTE} from "../utils/consts";
 import EditDevice from "../components/modals/editDevice";
 import EditDeviceInfo from "../components/modals/editDeviceInfo";
+import AddDeviceInfo from "../components/modals/addDeviceInfo";
 
 const DevicePage = () => {
     const [oneDevice, setOneDevices] = useState({info: []})
     const [editVisible, setEditVisible] = useState(false)
     const [editInfoVisible, setEditInfoVisible] = useState(false)
+    const [infoAddVisible, setInfoAddVisible] = useState(false)
     const {id} = useParams()
     const {user} = useContext(Context)
     const {info} = useContext(Context)
@@ -71,9 +73,13 @@ const DevicePage = () => {
                             onClick={()=>{setEditVisible(true)}}
                             >Редактировать параметры товара</Button>
 
-                            <Button variant={"outline-success"}
+                            <Button variant={"outline-danger"}
                             onClick={()=>{setEditInfoVisible(true)}}
                             >Изменить характеристики товара</Button>
+
+                            <Button variant={"outline-success"}
+                            onClick={()=>{setInfoAddVisible(true)}}
+                            >Добавить характеристики товара</Button>
                         </div>
                         }
                     </Card>
@@ -99,6 +105,11 @@ const DevicePage = () => {
                         oneDeviceId={id}
                         onHide={() => {
                             setEditInfoVisible(false)
+                        }}/>
+            <AddDeviceInfo show={infoAddVisible}
+                        oneDeviceId={id}
+                        onHide={() => {
+                            setInfoAddVisible(false)
                         }}/>
 
 
