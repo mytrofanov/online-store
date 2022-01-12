@@ -13,14 +13,9 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const [price, setPrice] = useState(0)
     const [file, setFile] = useState(null)
     const [info, setInfo] = useState([])
-    const [infoFromForm, setInfoFromForm] = useState({})
-
-    const [infoToSend, setInfoToSend] = useState([])
     const [changeFile, setChangeFile] = useState(false)
     const onSubmit = data => {
-        setInfoFromForm(data)
-        arrayCreator(infoFromForm)
-        sendUpdatedInfo()
+        arrayCreator(data)
     }
 
 
@@ -49,7 +44,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
                 }
             }
         }
-        setInfoToSend(array)
+        return  sendUpdatedInfo(array)
     }
 
 
@@ -64,7 +59,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             setInfo(data.info)
 
         })
-    }, [])
+    }, [infoToSend])
 
 
     // const addInfo = () => {
@@ -103,17 +98,20 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
             console.log(e)
         }
     }
-    const sendUpdatedInfo = () => {
-        const formData = new FormData()
-        formData.append('info', JSON.stringify(infoToSend))
-
-        try {
-            updateInfo(formData).then(data => {
-                onHide()
-                console.log(data)
-            })
-        } catch (e) {
-            console.log(e)
+    const sendUpdatedInfo = (array) => {
+        array.length < 1 && console.log('данные для отправки отсутствуют')
+        if (array.length > 0) {
+            const formData = new FormData()
+            formData.append('info', JSON.stringify(array))
+            try {
+                updateInfo(formData).then(data => {
+                    onHide()
+                    console.log('ответ сервера:')
+                    console.log(data)
+                })
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
 

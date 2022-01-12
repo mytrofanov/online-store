@@ -94,12 +94,14 @@ class DeviceController {
                 info = JSON.parse(info)
                 info.forEach(i =>
                     DeviceInfo.update({
-                        title: i.title,
-                        description: i.description
-                    }, {where:{id:i.id}})
+                        title: i[0].title,
+                        description: i[0].description
+                    }, {where:{id:i[0].id}})
                 )
+                if (info.length < 1) { return next(ApiError.success('В запросе не было данных для изменения'))}
                 return next(ApiError.success('Изменения в инфо о товаре внесены'))
-            } else return next(ApiError.success('В заголовке запроса нет info'))
+            }
+            else return next(ApiError.success('В заголовке запроса нет info'))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
