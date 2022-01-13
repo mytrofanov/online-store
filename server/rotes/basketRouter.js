@@ -1,11 +1,13 @@
 const Router = require('express')
 const router = new Router()
 const basketController = require('../controllers/basketController')
+const checkRole = require("../middleware/checkRoleMiddleware");
 
 
-router.post('/createBasket', basketController.putInBasket )
-router.post('/delBasket',  basketController.deleteFromBasket )
-router.get('/getBasket', basketController.getBasket )
+router.post('/createBasket',checkRole('USER'), basketController.putInBasket )
+router.post('/delBasket', checkRole('USER'), basketController.deleteFromBasket )
+router.get('/getBasket',checkRole('USER'), basketController.getBasket )
+router.get('/', checkRole('USER'), basketController.getBasketId )
 
 
 

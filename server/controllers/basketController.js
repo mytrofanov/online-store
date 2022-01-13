@@ -1,4 +1,4 @@
-const {BasketDevice} = require('../models/models')
+const {BasketDevice, Basket} = require('../models/models')
 const ApiError = require('../error/ApiError')
 const {where} = require("sequelize");
 
@@ -7,7 +7,7 @@ class BasketController {
         try {
             let {deviceId, basketId} = req.body
             if(deviceId && basketId) {
-                const basket = await BasketDevice.create({deviceId, basketId})
+                await BasketDevice.create({deviceId, basketId})
                 return next(ApiError.success('Товар с Id: ' + deviceId + 'добавлен в корзину'))
             } else return next(ApiError.success('в запросе отсутствует deviceId и basketId '))
         } catch (e) {
@@ -35,11 +35,29 @@ class BasketController {
         }
     }
     async getBasket(req, res, next) {
-        const {basketId} = req.body
-        if (basketId) {
-            const basket = await BasketDevice.findAll({where:{basketId}})
-            return res.json(basket)
-        } else return next(ApiError.success('в запросе отсутствует Id корзины. Id=' + basketId))
+        try {
+            const {basketId} = req.body
+            if (basketId) {
+                const basket = await BasketDevice.findAll({where:{basketId}})
+                return res.json(basket)
+            } else return next(ApiError.success('в запросе отсутствует Id корзины. Id=' + basketId))
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
+
+
+    }
+    async getBasketId(req, res, next) {
+        try {
+            const {userId} = req.body
+            if (userId) {
+                const basketId = await Basket.findAll({where:{userId}})
+                return res.json(basketId)
+            } else return next(ApiError.success('в запросе отсутствует userId. Id=' + userId))
+        }catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
+
 
     }
 }
