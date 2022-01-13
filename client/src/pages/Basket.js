@@ -79,20 +79,29 @@ const Basket = ({onHide, show}) => {
             <Modal.Body>
                 <ListGroup>
                     {priceList.map((device, index) =>
-                        <ListGroup.Item
-                            key={device.id}
-                            variant={index % 2 === 0 ? 'success' : 'light'}>
+                        <div key={device.id + device.name} style={{display:'flex', flexdirection:'raw'}}>
+                            <ListGroup.Item
+                                key={device.id}
+                                variant={index % 2 === 0 ? 'success' : 'light'}>
 
-                            Название: {device.name}
-                            Цена: {device.price}
-                            Количество: {device.quality}
-                            Сумма: {device.summ}
-                        </ListGroup.Item>
+                                Название: {device.name}
+                                Цена: {device.price}
+                                Количество: {device.quality}
+                                Сумма: {device.summ}
+                            </ListGroup.Item>
+                            <Button variant="outline-danger" onClick={() => {
+
+                            }}>Удалить из корзины</Button>
+                        </div>
                     )}
                     <ListGroup.Item variant="info">Итого: {totalSum}</ListGroup.Item>
                 </ListGroup>
             </Modal.Body>
             <Modal.Footer>
+                <Button variant="outline-dark" onClick={() => {
+                    basket.setAskForBasket(false)
+                    onHide()
+                }}>Очистить корзину</Button>
                 <Button variant="outline-danger" onClick={() => {
                     basket.setAskForBasket(false)
                     onHide()
