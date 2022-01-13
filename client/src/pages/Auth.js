@@ -36,21 +36,22 @@ const Auth = observer(() => {
 
             if (isLoginPath) {
                 let basketId;
-                data = await login(email, password)
+                await login(email, password)
                     .then(async data => {
                         let userId = data.id
                         basketId = await getBasketId(userId)
-                        basketId && basket.setBasketId(basketId)
+                        basketId.id !== undefined && basket.setBasketId(basketId.id)
+                        if (data.role === "ADMIN") {
+                            user.setIsAdmin(true)
+                        }
+                        if (data.id) {
+                            user.setUserId(data.id)
+                        }
                     }
 
                 )
 
-                if (data.role === "ADMIN") {
-                    user.setIsAdmin(true)
-                }
-                if (data.id) {
-                    user.setUserId(data.id)
-                }
+
 
             } else {
                 data = await registration(email, password, role)

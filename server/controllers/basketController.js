@@ -44,16 +44,16 @@ class BasketController {
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
-
-
     }
+
     async getBasketId(req, res, next) {
         try {
-            const {userId} = req.body
-            if (userId) {
-                const basketId = await Basket.findAll({where:{userId}})
-                return res.json(basketId)
-            } else return next(ApiError.success('в запросе отсутствует userId. Id=' + userId))
+            const {userId} = req.query
+                if(userId) {
+                    const basketId = await Basket.findOne({where:{userId}})
+                    return res.json(basketId)
+                }
+
         }catch (e) {
             next(ApiError.badRequest(e.message))
         }
