@@ -8,30 +8,39 @@ import {fetchOneDevice} from "../http/deviceAPI";
 const Basket = ({onHide, show}) => {
     const {basket} = useContext(Context)
     const [priceList, setPriceList] = useState([])
-    let totalSum = 0
+    const [totalSum, setTotalSum] = useState(0)
+
     const pay = () => {
         basket.setBasketVisible(false)
     }
     let basketId = basket.basketId
+
     function makePriceList(array) {
         let b = []
         let c = array
         let idSet = new Set()
-
-        c.forEach(i=>{
-            if(!idSet.has(i.id)){
+        let sum = 0
+        c.forEach(i => {
+            if (!idSet.has(i.id)) {
                 b.push(i)
             }
-            if(idSet.has(i.id)){
-                b.forEach(j=>{
-                    if(j.id === i.id) {j.quality +=1}
+            if (idSet.has(i.id)) {
+                b.forEach(j => {
+                    if (j.id === i.id) {
+                        j.quality += 1
+                    }
                 })
             }
             idSet.add(i.id)
         })
-        b.forEach(q=>{
+        b.forEach(q => {
             q.summ = q.quality * q.price
         })
+
+        b.forEach(item =>
+            sum += item.summ
+        )
+        setTotalSum(sum)
         setPriceList(b)
     }
 
@@ -42,27 +51,17 @@ const Basket = ({onHide, show}) => {
             getBasket(basketId).then(data => {
                 data.map(async (i) => {
                     await fetchOneDevice(i.deviceId).then(devices => {
-                            devices !==undefined && tempArray.push(devices)
+                            devices !== undefined && tempArray.push(devices)
                         }
-                    ).then(data=>
+                    ).then(data =>
                         tempArray.forEach(i => i.quality = 1)
-                    ).then(data=>
+                    ).then(data =>
                         makePriceList(tempArray)
                     )
                 })
             })
         }
     }, [basket.basketVisible])
-
-    function totalSumToPay() {
-        let sum
-        priceList.forEach(item=>
-            sum += item.summ
-        )
-        totalSum = sum
-    }
-    totalSumToPay()
-
 
     return (
         <Modal
@@ -79,7 +78,7 @@ const Basket = ({onHide, show}) => {
             </Modal.Header>
             <Modal.Body>
                 <ListGroup>
-                    {priceList.map((device, index)=>
+                    {priceList.map((device, index) =>
                         <ListGroup.Item
                             key={device.id}
                             variant={index % 2 === 0 ? 'success' : 'light'}>
@@ -89,7 +88,6 @@ const Basket = ({onHide, show}) => {
                             Количество: {device.quality}
                             Сумма: {device.summ}
                         </ListGroup.Item>
-
                     )}
                     <ListGroup.Item variant="info">Итого: {totalSum}</ListGroup.Item>
                 </ListGroup>
