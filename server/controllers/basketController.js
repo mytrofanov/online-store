@@ -7,9 +7,9 @@ class BasketController {
         try {
             let {deviceId, basketId} = req.body
             if(deviceId && basketId) {
-                await BasketDevice.create({deviceId, basketId})
+                const basket = await BasketDevice.create({deviceId, basketId})
                 return next(ApiError.success('Товар с Id: ' + deviceId + 'добавлен в корзину'))
-            } else return next(ApiError.success('в запросе отсутствует deviceId и basketId '))
+            } else return next(ApiError.success('в запросе deviceId= ' + deviceId + ' и basketId= ' + basketId))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
@@ -36,7 +36,7 @@ class BasketController {
     }
     async getBasket(req, res, next) {
         try {
-            const {basketId} = req.body
+            const {basketId} = req.query
             if (basketId) {
                 const basket = await BasketDevice.findAll({where:{basketId}})
                 return res.json(basket)
@@ -57,8 +57,6 @@ class BasketController {
         }catch (e) {
             next(ApiError.badRequest(e.message))
         }
-
-
     }
 }
 

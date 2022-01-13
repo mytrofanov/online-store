@@ -11,15 +11,16 @@ const Basket = ({onHide,show}) => {
 
         basket.setBasketVisible(false)
     }
+    let basketId = basket.basketId
 
     useEffect(()=>{
-            if(user.userId && basket.askForBasket) {
-            console.log(user.userId)
-            getBasket({basketId:user.userId}).then(data=>{
+            if(basketId && basket.askForBasket) {
+            console.log('basketId:' + basketId)
+            getBasket({basketId}).then(data=>{
                 console.log(data)
-                basket.setBasketDevices(data)
+                // basket.setBasketDevices(data)
             })
-        } else console.log('пользователь не авторизован')
+        }
 
     },[])
 

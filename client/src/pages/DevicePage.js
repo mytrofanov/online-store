@@ -24,6 +24,8 @@ const DevicePage = observer(() => {
     const {info} = useContext(Context)
     const navigate = useNavigate();
 
+    let deviceId = Number(id)
+
     useEffect(() => {
         fetchOneDevice(id).then(data => setOneDevices(data))
     }, [editVisible, editInfoVisible, infoAddVisible, id])
@@ -40,11 +42,13 @@ const DevicePage = observer(() => {
         const formData = new FormData()
         formData.append('deviceId', deviceId)
         formData.append('basketId', basketId)
+
         try {
             putInBasket(formData).then(data => {
                 console.log(data)
+                basket.setBasketVisible(true)
             })
-            basket.setBasketVisible(true)
+
         } catch (e) {
             console.log(e)
         }
@@ -79,7 +83,7 @@ const DevicePage = observer(() => {
                             <h3>{oneDevice.price} грн.</h3>
                             <Button variant={"outline-dark"}
                                     onClick={() => {
-                                        putDeviceInBasket(id, user.id)
+                                        putDeviceInBasket(deviceId, basket.basketId)
                                         basket.setAskForBasket(true)
                                     }}
                             >Добавить в корзину</Button>
