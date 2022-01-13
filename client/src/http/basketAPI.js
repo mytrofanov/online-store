@@ -8,9 +8,25 @@ export const putInBasket = async (basket) => {
         console.log(e)
     }
 }
-export const deleteFromBasket = async (Goods) => {
+export const delOneFromBasket = async (device) => {
     try {
-        const {data} = await $authHost.post('api/basket/delBasket', Goods)
+        const {data} = await $authHost.post('api/basket/delBasket', device)
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const clearBasket = async (basketId) => {
+    try {
+        const {data} = await $authHost.post('api/basket/clearBasket', {params: {basketId}})
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const delSingleFromBasket = async (id) => {
+    try {
+        const {data} = await $authHost.post('api/basket/delSingleBasket', id)
         return data
     } catch (e) {
         console.log(e)

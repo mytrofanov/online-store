@@ -45,7 +45,6 @@ const DevicePage = observer(() => {
 
         try {
             putInBasket(formData).then(data => {
-                console.log(data)
                 basket.setBasketVisible(true)
             })
 

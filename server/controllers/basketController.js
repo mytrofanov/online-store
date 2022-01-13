@@ -25,13 +25,24 @@ class BasketController {
             next(ApiError.badRequest(e.message))
         }
     }
+    async delSingleFromBasket(req, res, next) {
+        try {
+            let {id} = req.body
+            if (id) {
+                await BasketDevice.destroy({where: {id}})
+                return next(ApiError.success('единица товара удалена из корзины'))
+            }
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
+    }
     async delAllFromBasket(req, res, next) {
         try {
-            let {basketId} = req.body
+            let {basketId} = req.query
             if (basketId) {
                 await BasketDevice.destroy({where: {basketId}})
                 return next(ApiError.success('Корзина очищена'))
-            }
+            } else return next(ApiError.success('в запросе отсутствует Id корзины. Id=' + basketId))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }

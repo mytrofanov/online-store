@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, ListGroup, Modal} from "react-bootstrap";
 import {Context} from "../index";
-import {getBasket} from "../http/basketAPI";
+import {clearBasket, delOneFromBasket, delSingleFromBasket, getBasket} from "../http/basketAPI";
 import {fetchOneDevice} from "../http/deviceAPI";
 
 
@@ -9,11 +9,46 @@ const Basket = ({onHide, show}) => {
     const {basket} = useContext(Context)
     const [priceList, setPriceList] = useState([])
     const [totalSum, setTotalSum] = useState(0)
-
+    const [basketInfo, setBasketInfo] = useState([])
     const pay = () => {
         basket.setBasketVisible(false)
     }
     let basketId = basket.basketId
+    const delAllFromBasket = () => {
+        try {
+            clearBasket(basketId).then(data=>
+            console.log(data)
+            )
+        }catch (e) {
+            console.log(e)
+        }
+
+    }
+    const delOneFromBasket = (deviceId) =>{
+        const formData = new FormData()
+        formData.append('deviceId', deviceId)
+        formData.append('basketId', basketId)
+        try {
+            delOneFromBasket(formData)
+        }catch(e) {
+            console.log(e)
+        }
+    }
+    const delSingleFromBasket = (deviceId) => {
+        let single = 0
+        basketInfo.forEach(i=>{
+            if(i.deviceId === deviceId) {
+                return single = i.id}
+        }
+        )
+        try {
+            if (single !== 0) {
+                delSingleFromBasket(single)
+            }
+        }catch (e) {
+            console.log(e)
+        }
+    }
 
     function makePriceList(array) {
         let b = []
@@ -49,6 +84,7 @@ const Basket = ({onHide, show}) => {
             console.log('basketId:' + basketId)
             let tempArray = []
             getBasket(basketId).then(data => {
+                setBasketInfo(data)
                 data.map(async (i) => {
                     await fetchOneDevice(i.deviceId).then(devices => {
                             devices !== undefined && tempArray.push(devices)
@@ -79,7 +115,7 @@ const Basket = ({onHide, show}) => {
             <Modal.Body>
                 <ListGroup>
                     {priceList.map((device, index) =>
-                        <div key={device.id + device.name} style={{display:'flex', flexdirection:'raw'}}>
+                        <div key={device.id + device.name} style={{display: 'flex', flexdirection: 'raw'}}>
                             <ListGroup.Item
                                 key={device.id}
                                 variant={index % 2 === 0 ? 'success' : 'light'}>
@@ -99,8 +135,7 @@ const Basket = ({onHide, show}) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-dark" onClick={() => {
-                    basket.setAskForBasket(false)
-                    onHide()
+                    delAllFromBasket()
                 }}>Очистить корзину</Button>
                 <Button variant="outline-danger" onClick={() => {
                     basket.setAskForBasket(false)
