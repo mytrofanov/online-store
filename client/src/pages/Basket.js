@@ -14,15 +14,14 @@ const Basket = ({onHide,show}) => {
     let basketId = basket.basketId
 
     useEffect(()=>{
-            if(basketId && basket.askForBasket) {
+            if(basketId && basket.basketVisible) {
             console.log('basketId:' + basketId)
-            getBasket({basketId}).then(data=>{
+            getBasket(basketId).then(data=>{
                 console.log(data)
                 // basket.setBasketDevices(data)
             })
         }
-
-    },[])
+    },[basket.basketVisible])
 
     return (
         <Modal
