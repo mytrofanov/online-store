@@ -14,22 +14,24 @@ class BasketController {
             next(ApiError.badRequest(e.message))
         }
     }
-    async deleteFromBasket(req, res, next) {
+    async delOneFromBasket(req, res, next) {
         try {
-            let {deviceId, basketId, manyDevices} = req.body
-            await BasketDevice.destroy({where: {deviceId, basketId}})
-            if (manyDevices) {
-                manyDevices = JSON.parse(manyDevices)
-                manyDevices.forEach(i =>
-                    BasketDevice.destroy({where: {
-                            deviceId: i.deviceId,
-                            basketId: i.basketId
-                        }
-                    })
-                )
+            let {deviceId, basketId} = req.body
+            if (deviceId && basketId) {
+                await BasketDevice.destroy({where: {deviceId, basketId}})
+                return next(ApiError.success('товар удален из корзины'))
+            }
+        } catch (e) {
+            next(ApiError.badRequest(e.message))
+        }
+    }
+    async delAllFromBasket(req, res, next) {
+        try {
+            let {basketId} = req.body
+            if (basketId) {
+                await BasketDevice.destroy({where: {basketId}})
                 return next(ApiError.success('Корзина очищена'))
             }
-            return next(ApiError.success('товар удален из корзины'))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
