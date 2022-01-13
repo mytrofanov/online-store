@@ -24,3 +24,11 @@ export const getBasket = async (basketId) => {
         console.log(e)
     }
 }
+export const getBasketId = async (userId) => {
+    try {
+        const {data} = await $host.get('api/basket/', userId )
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}

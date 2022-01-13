@@ -7,10 +7,12 @@ import {login, registration} from "../http/userAPI";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import InfoModal from "../components/modals/infoModal";
+import {getBasketId} from "../http/basketAPI";
 
 const Auth = observer(() => {
     const {user} = useContext(Context)
     const {info} = useContext(Context)
+    const {basket} = useContext(Context)
     const location = useLocation()
     const history = useNavigate()
     const isLoginPath = location.pathname === LOGIN_ROUTE
@@ -33,7 +35,16 @@ const Auth = observer(() => {
             let data;
 
             if (isLoginPath) {
+                let basketId;
                 data = await login(email, password)
+                    .then(async data => {
+                        let userId = data.id
+                        basketId = await getBasketId(userId)
+                        basketId && basket.setBasketId(basketId)
+                    }
+
+                )
+
                 if (data.role === "ADMIN") {
                     user.setIsAdmin(true)
                 }
