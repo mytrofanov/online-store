@@ -12,145 +12,141 @@ import AddDeviceInfo from "../components/modals/addDeviceInfo";
 import {observer} from "mobx-react-lite";
 import {putInBasket} from "../http/basketAPI";
 
+
 const DevicePage = observer(() => {
-    const [oneDevice, setOneDevices] = useState({info: []})
-    const [editVisible, setEditVisible] = useState(false)
-    const [editInfoVisible, setEditInfoVisible] = useState(false)
-    const [infoAddVisible, setInfoAddVisible] = useState(false)
-    const {basket} = useContext(Context)
-    const {id} = useParams()
-    const {user} = useContext(Context)
-    const {info} = useContext(Context)
-    const navigate = useNavigate();
+            const [oneDevice, setOneDevices] = useState({info: []})
+            const [editVisible, setEditVisible] = useState(false)
+            const [editInfoVisible, setEditInfoVisible] = useState(false)
+            const [infoAddVisible, setInfoAddVisible] = useState(false)
+            const {basket} = useContext(Context)
+            const {id} = useParams()
+            const {user} = useContext(Context)
+            const {info} = useContext(Context)
+            const navigate = useNavigate();
 
-    let deviceId = Number(id)
+            let deviceId = Number(id)
 
-    useEffect(() => {
-        fetchOneDevice(id).then(data => setOneDevices(data))
-    }, [editVisible, editInfoVisible, infoAddVisible, id])
+            useEffect(() => {
+                fetchOneDevice(id).then(data => setOneDevices(data))
+            }, [editVisible, editInfoVisible, infoAddVisible, id])
 
-    const delDevice = (oneDeviceId) => {
-        deleteDevice({id: oneDeviceId}).then(data => {
-                info.setInfoShop(data.message)
-                info.setInfoShopVisible(true)
+            const delDevice = (oneDeviceId) => {
+                deleteDevice({id: oneDeviceId}).then(data => {
+                        info.setInfoShop(data.message)
+                        info.setInfoShopVisible(true)
+                    }
+                )
+                navigate(SHOP_ROUTE)
             }
-        )
-        navigate(SHOP_ROUTE)
-    }
-    const putDeviceInBasket = (deviceId, basketId) => {
-        const formData = new FormData()
-        formData.append('deviceId', deviceId)
-        formData.append('basketId', basketId)
+            const putDeviceInBasket = (deviceId, basketId) => {
+                const formData = new FormData()
+                formData.append('deviceId', deviceId)
+                formData.append('basketId', basketId)
 
-        try {
-            putInBasket(formData).then(data => {
-                basket.setBasketVisible(true)
-                basket.setAskForBasket(true)
-                basket.setBasketEmpty(false)
-            })
-
-        } catch (e) {
-            console.log(e)
-        }
-    }
-        const imageOfDevice = (oneDevice.img === undefined) ? noImage : process.env.REACT_APP_API_URL + oneDevice.img
+                putInBasket(formData).then(data => {
+                    basket.setBasketVisible(true)
+                    basket.setAskForBasket(true)
+                    basket.setBasketEmpty(false)
+                })
+            }
+            const imageOfDevice = (oneDevice.img === undefined) ? noImage : process.env.REACT_APP_API_URL + oneDevice.img
 
 
-        return (
-            <Container className="mt-3">
-                <Row>
-                    <Col md={4}>
-                        <Image width={300} height={300} src={imageOfDevice}/>
-                    </Col>
-                    <Col md={4}>
-                        <Row className="d-flex flex-column align-items-center">
-                            <h2>
-                                {oneDevice.name}
-                            </h2>
-                            <div className="d-flex align-items-center justify-content-center"
-                                 style={{
-                                     background: `url(${star}) no-repeat center center`,
-                                     width: 150, height: 150, backgroundSize: 'cover',
-                                     fontSize: 55
-                                 }}>
-                                {oneDevice.rating}
-                            </div>
-                        </Row>
-                    </Col>
-                    <Col md={4}>
-                        <Card className="d-flex flex-column align-items-center justify-content-around"
-                              style={{width: 300, height: 300, fontSize: 32, border: '5px solid lightgray'}}>
-                            <h3>{oneDevice.price} грн.</h3>
-                            <Button variant={"outline-dark"}
-                                    onClick={() => {
-                                        if (basket.basketId) {
-                                            putDeviceInBasket(deviceId, basket.basketId)
-
-                                        }
-                                        !basket.basketId && console.log('Пользователь не авторизован')
-                                    }}
-                            >Добавить в корзину</Button>
-
-                            {user.isAdmin && <div>
-                                <Button variant={"outline-danger"}
+            return (
+                <Container className="mt-3">
+                    <Row>
+                        <Col md={4}>
+                            <Image width={300} height={300} src={imageOfDevice}/>
+                        </Col>
+                        <Col md={4}>
+                            <Row className="d-flex flex-column align-items-center">
+                                <h2>
+                                    {oneDevice.name}
+                                </h2>
+                                <div className="d-flex align-items-center justify-content-center"
+                                     style={{
+                                         background: `url(${star}) no-repeat center center`,
+                                         width: 150, height: 150, backgroundSize: 'cover',
+                                         fontSize: 55
+                                     }}>
+                                    {oneDevice.rating}
+                                </div>
+                            </Row>
+                        </Col>
+                        <Col md={4}>
+                            <Card className="d-flex flex-column align-items-center justify-content-around"
+                                  style={{width: 300, height: 300, fontSize: 32, border: '5px solid lightgray'}}>
+                                <h3>{oneDevice.price} грн.</h3>
+                                <Button variant={"outline-dark"}
                                         onClick={() => {
-                                            delDevice(id)
-                                        }}
-                                >Удалить товар</Button>
-                                <Button variant={"outline-success"}
-                                        onClick={() => {
-                                            setEditVisible(true)
-                                        }}
-                                >Редактировать параметры товара</Button>
+                                            if (basket.basketId) {
+                                                putDeviceInBasket(deviceId, basket.basketId)
 
-                                <Button variant={"outline-danger"}
-                                        onClick={() => {
-                                            setEditInfoVisible(true)
+                                            }
+                                            !basket.basketId && console.log('Пользователь не авторизован')
                                         }}
-                                >Изменить характеристики товара</Button>
+                                >Добавить в корзину</Button>
 
-                                <Button variant={"outline-success"}
-                                        onClick={() => {
-                                            setInfoAddVisible(true)
-                                        }}
-                                >Добавить характеристики товара</Button>
-                            </div>
-                            }
-                        </Card>
-                    </Col>
-                </Row>
-                <Row className="d-flex flex-column m-3">
-                    <h2>Характеристики</h2>
-                    {oneDevice.info.map((info, index) =>
-                        <Row key={info.id} style={
-                            {background: index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
-                            {info.title} : {info.description}
-                        </Row>
-                    )}
-                </Row>
+                                {user.isAdmin && <div>
+                                    <Button variant={"outline-danger"}
+                                            onClick={() => {
+                                                delDevice(id)
+                                            }}
+                                    >Удалить товар</Button>
+                                    <Button variant={"outline-success"}
+                                            onClick={() => {
+                                                setEditVisible(true)
+                                            }}
+                                    >Редактировать параметры товара</Button>
 
-                <EditDevice show={editVisible}
-                            oneDeviceId={id}
-                            onHide={() => {
-                                setEditVisible(false)
-                            }}/>
+                                    <Button variant={"outline-danger"}
+                                            onClick={() => {
+                                                setEditInfoVisible(true)
+                                            }}
+                                    >Изменить характеристики товара</Button>
 
-                <EditDeviceInfo show={editInfoVisible}
+                                    <Button variant={"outline-success"}
+                                            onClick={() => {
+                                                setInfoAddVisible(true)
+                                            }}
+                                    >Добавить характеристики товара</Button>
+                                </div>
+                                }
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Row className="d-flex flex-column m-3">
+                        <h2>Характеристики</h2>
+                        {oneDevice.info.map((info, index) =>
+                            <Row key={info.id} style={
+                                {background: index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
+                                {info.title} : {info.description}
+                            </Row>
+                        )}
+                    </Row>
+
+                    <EditDevice show={editVisible}
                                 oneDeviceId={id}
                                 onHide={() => {
-                                    setEditInfoVisible(false)
+                                    setEditVisible(false)
                                 }}/>
-                <AddDeviceInfo show={infoAddVisible}
-                               oneDeviceId={id}
-                               onHide={() => {
-                                   setInfoAddVisible(false)
-                               }}/>
 
-            </Container>
-        );
+                    <EditDeviceInfo show={editInfoVisible}
+                                    oneDeviceId={id}
+                                    onHide={() => {
+                                        setEditInfoVisible(false)
+                                    }}/>
+                    <AddDeviceInfo show={infoAddVisible}
+                                   oneDeviceId={id}
+                                   onHide={() => {
+                                       setInfoAddVisible(false)
+                                   }}/>
 
-    }
-)
-    ;
+                </Container>
+            );
 
-    export default DevicePage;
+        }
+    )
+;
+
+export default DevicePage;

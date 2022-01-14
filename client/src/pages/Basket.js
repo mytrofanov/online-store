@@ -1,23 +1,32 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, ListGroup, Modal} from "react-bootstrap";
 import {Context} from "../index";
-import {clearBasket, delOneFromBasket, delSingleFromBasket, getBasket} from "../http/basketAPI";
+import {clearBasket, delOneFromBasket, delSingleFromBasket, getBasket, putInBasket} from "../http/basketAPI";
 import {fetchOneDevice} from "../http/deviceAPI";
 import {observer} from "mobx-react-lite";
-
 
 const Basket = observer(({onHide, show}) => {
     const {basket} = useContext(Context)
     const [priceList, setPriceList] = useState([])
     const [totalSum, setTotalSum] = useState(0)
     const [basketInfo, setBasketInfo] = useState([])
+    const [basketChange, setBasketChange] = useState(false)
 
     let basketId = basket.basketId
 
     const pay = () => {
         basket.setBasketVisible(false)
     }
-
+    const plus = (deviceId) => {
+        const formData = new FormData()
+        formData.append('deviceId', deviceId)
+        formData.append('basketId', basketId)
+        putInBasket(formData).then(data=>{
+            console.log(data)
+            setBasketChange(basketChange=>!basketChange)
+            }
+        )
+    }
     const delAllFromBasket = () => {
         try {
             clearBasket({basketId}).then(data => {
@@ -40,7 +49,7 @@ const Basket = observer(({onHide, show}) => {
             console.log(e)
         }
     }
-    const delSingleFromBasket = (deviceId) => {
+    const minus = (deviceId) => {
         let single = 0
         basketInfo.forEach(i => {
                 if (i.deviceId === deviceId) {
@@ -50,7 +59,10 @@ const Basket = observer(({onHide, show}) => {
         )
         try {
             if (single !== 0) {
-                delSingleFromBasket(single)
+                delSingleFromBasket(single).then(data=>{
+                    console.log(data)
+                    setBasketChange(basketChange=>!basketChange)
+                })
             }
         } catch (e) {
             console.log(e)
@@ -97,13 +109,16 @@ const Basket = observer(({onHide, show}) => {
                         }
                     ).then(data =>
                         tempArray.forEach(i => i.quality = 1)
-                    ).then(data =>
-                        makePriceList(tempArray)
+                    ).then(data => {
+                            makePriceList(tempArray)
+                            tempArray.length>0 && basket.setBasketEmpty(false)
+                        }
                     )
                 })
             })
         }
-    }, [basket.basketVisible, basket.basketEmpty])
+    }, [basket.basketVisible, basketChange, basket.askForBasket])
+
 
     return (
         <Modal
@@ -128,9 +143,15 @@ const Basket = observer(({onHide, show}) => {
 
                                 Название: {device.name}
                                 Цена: {device.price}
-                                Количество: {device.quality}
-                                Сумма: {device.summ}
                             </ListGroup.Item>
+                            <Button variant="outline-danger" onClick={() => {
+                                minus(device.id)
+                            }}>−</Button>
+                            Количество: {device.quality}
+                            <Button variant="outline-danger" onClick={() => {
+                                plus(device.id)
+                            }}>+</Button>
+                            Сумма: {device.summ}
                             <Button variant="outline-danger" onClick={() => {
 
                             }}>Удалить из корзины</Button>

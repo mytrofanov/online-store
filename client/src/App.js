@@ -27,7 +27,7 @@ const App = observer( () => {
     },[])
     const openBasket = () => {
         basket.setBasketVisible(true)
-        basket.setAskForBasket(true)
+        basket.setAskForBasket(!basket.askForBasket)
     }
 
     if (loading) {
