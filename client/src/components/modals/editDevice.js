@@ -33,6 +33,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
         formData.append('id', editedDevice.id)
         formData.append('name', name)
         formData.append('price', `${price}`)
+        formData.append('img', file)
         formData.append('brandId', device.selectedBrand.id || editedDevice.brandId)
         formData.append('typeId', device.selectedType.id || editedDevice.typeId)
         try {

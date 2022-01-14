@@ -32,7 +32,10 @@ class DeviceController {
     async update(req, res, next) {
         try {
             let {id, name, price, brandId, typeId} = req.body
-            await Device.update({name, price, brandId, typeId},
+            const {img} = req.files
+            let fileName = uuid.v4() + '.jpeg'
+            img.mv(path.resolve(__dirname, '..', 'static', fileName))  //removes files to /static
+            await Device.update({name, price, brandId, typeId,img: fileName},
                 {where: {id}})
 
             return next(ApiError.success('Изменения внесены'))
