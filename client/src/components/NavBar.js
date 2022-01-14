@@ -7,7 +7,7 @@ import {useNavigate} from "react-router";
 import {observer} from "mobx-react-lite";
 
 
-const NavBar = observer(() => {
+const NavBar = observer(({openBasket}) => {
     const {user} = useContext(Context)
     const navigate = useNavigate()
     const logOut = () => {
@@ -16,6 +16,7 @@ const NavBar = observer(() => {
         user.setIsAdmin(false)
         user.setTriedToLogin(false)
     }
+
 
     return (
         <Navbar bg="dark" variant="dark">
@@ -32,14 +33,14 @@ const NavBar = observer(() => {
                                     }}
                             >Админ панель</Button>
                             <Button variant="secondary" className="me-lg-2"
-                                    onClick={() => navigate(LOGIN_ROUTE)
+                                    onClick={() =>  navigate(LOGIN_ROUTE)
                                     }>Авторизация</Button>
                         </>
 
 
                     }
                     {user.isAuth &&
-                        <Button variant="secondary" onClick={() => logOut()
+                        <Button  variant="secondary" className="me-lg-2" onClick={() => logOut()
                         }>Выйти</Button>
                     }
                     {!user.isAuth &&
@@ -47,6 +48,13 @@ const NavBar = observer(() => {
                                 onClick={() => navigate(LOGIN_ROUTE)
                                 }>Авторизация</Button>
                     }
+                    <div>
+                        <Button variant="secondary" className="me-lg-2"
+                                onClick={() =>openBasket()
+                                }>🛒</Button>
+                    </div>
+
+
                 </Nav>
             </Container>
         </Navbar>

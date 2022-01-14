@@ -8,12 +8,10 @@ import {Context} from "../index";
 import {fetchBrands, fetchDevices, fetchTypes} from "../http/deviceAPI";
 import Pages from "../components/pages";
 import InfoModal from "../components/modals/infoModal";
-import Basket from "./Basket";
 
 const Shop = observer(() => {
     const {device} = useContext(Context)
     const {info} = useContext(Context)
-    const {basket} = useContext(Context)
     useEffect(() => {
         fetchTypes().then(data => device.setTypes(data))
         fetchBrands().then(data => device.setBrands(data))
@@ -49,7 +47,7 @@ const Shop = observer(() => {
                            info.setInfoShopVisible(false)
                            info.setInfoShop('')
                        }}/> {/*shows the result of any action*/}
-            <Basket onHide={basket.setBasketVisible(false)} show={basket.basketVisible}/>
+
         </Container>
     );
 });

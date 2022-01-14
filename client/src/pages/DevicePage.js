@@ -9,7 +9,6 @@ import {SHOP_ROUTE} from "../utils/consts";
 import EditDevice from "../components/modals/editDevice";
 import EditDeviceInfo from "../components/modals/editDeviceInfo";
 import AddDeviceInfo from "../components/modals/addDeviceInfo";
-import Basket from "./Basket";
 import {observer} from "mobx-react-lite";
 import {putInBasket} from "../http/basketAPI";
 
@@ -46,6 +45,8 @@ const DevicePage = observer(() => {
         try {
             putInBasket(formData).then(data => {
                 basket.setBasketVisible(true)
+                basket.setAskForBasket(true)
+                basket.setBasketEmpty(false)
             })
 
         } catch (e) {
@@ -84,8 +85,7 @@ const DevicePage = observer(() => {
                                     onClick={() => {
                                         if (basket.basketId) {
                                             putDeviceInBasket(deviceId, basket.basketId)
-                                            basket.setAskForBasket(true)
-                                            basket.setBasketEmpty(false)
+
                                         }
                                         !basket.basketId && console.log('Пользователь не авторизован')
                                     }}
@@ -145,9 +145,6 @@ const DevicePage = observer(() => {
                                onHide={() => {
                                    setInfoAddVisible(false)
                                }}/>
-                <Basket onHide={() => {
-                    basket.setBasketVisible(false)
-                }} show={basket.basketVisible}/>
 
             </Container>
         );

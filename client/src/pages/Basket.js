@@ -21,7 +21,7 @@ const Basket = observer(({onHide, show}) => {
     const delAllFromBasket = () => {
         try {
             clearBasket({basketId}).then(data => {
-                    console.log(data)
+                    // console.log(data)
                     basket.setBasketEmpty(true)
                 }
             )
@@ -88,7 +88,6 @@ const Basket = observer(({onHide, show}) => {
 
     useEffect(() => {
         if (basketId && basket.basketVisible) {
-            console.log('basketId:' + basketId)
             let tempArray = []
             getBasket(basketId).then(data => {
                 setBasketInfo(data)

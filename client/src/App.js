@@ -2,13 +2,15 @@ import {BrowserRouter} from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import NavBar from "./components/NavBar";
 import {observer} from "mobx-react-lite";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Context} from "./index";
 import {check} from "./http/userAPI";
 import {Spinner} from "react-bootstrap";
+import Basket from "./pages/Basket";
 
 const App = observer( () => {
     const {user} = useContext(Context)
+    const {basket} = useContext(Context)
     const [loading, setLoading] = useState(true)
     useEffect(()=>{
         if (user.triedToLogin === true) {
@@ -23,7 +25,10 @@ const App = observer( () => {
         }
         setLoading(false)
     },[])
-
+    const openBasket = () => {
+        basket.setBasketVisible(true)
+        basket.setAskForBasket(true)
+    }
 
     if (loading) {
         return (
@@ -35,8 +40,11 @@ const App = observer( () => {
 
     return (
         <BrowserRouter>
-            <NavBar/>
+            <NavBar openBasket={openBasket}/>
             <AppRouter/>
+            <Basket onHide={() => {
+                basket.setBasketVisible(false)
+            }} show={basket.basketVisible}/>
         </BrowserRouter>
     );
 })
