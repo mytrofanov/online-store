@@ -13,7 +13,7 @@ return function (req, res, next) {
         }
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
         if (decoded.role !== role) {
-            return res.status(403).json({message:"user is not ADMIN"})
+            return res.status(403).json({message:"user is not " + role})
         }
         req.user = decoded
         next()
