@@ -39,15 +39,14 @@ const Basket = observer(({onHide, show}) => {
                 }
 
             }
-            const delOneFromBasket = (deviceId) => {
+            const deleteDeviceFromBasket = (deviceId) => {
                 const formData = new FormData()
                 formData.append('deviceId', deviceId)
                 formData.append('basketId', basketId)
-                try {
-                    delOneFromBasket(formData)
-                } catch (e) {
-                    console.log(e)
-                }
+                delOneFromBasket(formData).then(data=> {
+                    setBasketChange(basketChange => !basketChange)
+                })
+
             }
             const minus = (deviceId) => {
                 for (let i = 0; i < basketInfo.length; i++) {
@@ -94,6 +93,9 @@ const Basket = observer(({onHide, show}) => {
                 if (basketId && basket.basketVisible) {
                     let tempArray = []
                     getBasket(basketId).then(data => {
+                        if (data.length === 0) {
+                            basket.setBasketEmpty(true)
+                        }
                         setBasketInfo(data)
                         data.map(async (i) => {
                             await fetchOneDevice(i.deviceId).then(devices => {
@@ -104,6 +106,7 @@ const Basket = observer(({onHide, show}) => {
                             ).then(data => {
                                     makePriceList(tempArray)
                                     tempArray.length > 0 && basket.setBasketEmpty(false)
+
                                 }
                             )
                         })
@@ -145,7 +148,7 @@ const Basket = observer(({onHide, show}) => {
                                     }}>+</Button>
                                     Сумма: {device.summ}
                                     <Button variant="outline-danger" onClick={() => {
-
+                                        deleteDeviceFromBasket(device.id)
                                     }}>Удалить из корзины</Button>
                                 </div>
                             )}
