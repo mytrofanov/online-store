@@ -3,49 +3,56 @@ import {Button, ListGroup, Modal} from "react-bootstrap";
 import {Context} from "../index";
 import {clearBasket, delOneFromBasket, delSingleFromBasket, getBasket} from "../http/basketAPI";
 import {fetchOneDevice} from "../http/deviceAPI";
+import {observer} from "mobx-react-lite";
 
 
-const Basket = ({onHide, show}) => {
+const Basket = observer(({onHide, show}) => {
     const {basket} = useContext(Context)
     const [priceList, setPriceList] = useState([])
     const [totalSum, setTotalSum] = useState(0)
     const [basketInfo, setBasketInfo] = useState([])
+
+    let basketId = basket.basketId
+
     const pay = () => {
         basket.setBasketVisible(false)
     }
-    let basketId = basket.basketId
+
     const delAllFromBasket = () => {
         try {
-            clearBasket(basketId).then(data=>
-            console.log(data)
+            clearBasket({basketId}).then(data => {
+                    console.log(data)
+                    basket.setBasketEmpty(true)
+                }
             )
-        }catch (e) {
+        } catch (e) {
             console.log(e)
         }
 
     }
-    const delOneFromBasket = (deviceId) =>{
+    const delOneFromBasket = (deviceId) => {
         const formData = new FormData()
         formData.append('deviceId', deviceId)
         formData.append('basketId', basketId)
         try {
             delOneFromBasket(formData)
-        }catch(e) {
+        } catch (e) {
             console.log(e)
         }
     }
     const delSingleFromBasket = (deviceId) => {
         let single = 0
-        basketInfo.forEach(i=>{
-            if(i.deviceId === deviceId) {
-                return single = i.id}
-        }
+        basketInfo.forEach(i => {
+                if (i.deviceId === deviceId) {
+                    return single = i.id
+                }
+            }
         )
         try {
             if (single !== 0) {
                 delSingleFromBasket(single)
             }
-        }catch (e) {
+        } catch (e) {
             console.log(e)
         }
     }
@@ -97,7 +104,7 @@ const Basket = ({onHide, show}) => {
                 })
             })
         }
-    }, [basket.basketVisible])
+    }, [basket.basketVisible, basket.basketEmpty])
 
     return (
         <Modal
@@ -113,7 +120,7 @@ const Basket = ({onHide, show}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <ListGroup>
+                {basket.basketEmpty === true ? <div>Корзина пуста</div> : <ListGroup>
                     {priceList.map((device, index) =>
                         <div key={device.id + device.name} style={{display: 'flex', flexdirection: 'raw'}}>
                             <ListGroup.Item
@@ -132,6 +139,8 @@ const Basket = ({onHide, show}) => {
                     )}
                     <ListGroup.Item variant="info">Итого: {totalSum}</ListGroup.Item>
                 </ListGroup>
+                }
+
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="outline-dark" onClick={() => {
@@ -147,6 +156,6 @@ const Basket = ({onHide, show}) => {
             </Modal.Footer>
         </Modal>
     );
-};
+});
 
 export default Basket;

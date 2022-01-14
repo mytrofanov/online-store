@@ -82,8 +82,12 @@ const DevicePage = observer(() => {
                             <h3>{oneDevice.price} грн.</h3>
                             <Button variant={"outline-dark"}
                                     onClick={() => {
-                                        putDeviceInBasket(deviceId, basket.basketId)
-                                        basket.setAskForBasket(true)
+                                        if (basket.basketId) {
+                                            putDeviceInBasket(deviceId, basket.basketId)
+                                            basket.setAskForBasket(true)
+                                            basket.setBasketEmpty(false)
+                                        }
+                                        !basket.basketId && console.log('Пользователь не авторизован')
                                     }}
                             >Добавить в корзину</Button>
 

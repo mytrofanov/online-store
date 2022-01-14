@@ -38,11 +38,11 @@ class BasketController {
     }
     async delAllFromBasket(req, res, next) {
         try {
-            let {basketId} = req.query
+            let {basketId} = req.body
             if (basketId) {
                 await BasketDevice.destroy({where: {basketId}})
                 return next(ApiError.success('Корзина очищена'))
-            } else return next(ApiError.success('в запросе отсутствует Id корзины. Id=' + basketId))
+            } else return next(ApiError.badRequest('в запросе отсутствует Id корзины. Id=' + basketId))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
