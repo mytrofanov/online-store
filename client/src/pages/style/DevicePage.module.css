@@ -10,8 +10,8 @@
 }
 
 .image {
-    width: 300px;
-    height: 300px;
+    max-width: 300px;
+    max-height: 300px;
 }
 .rating {
     background: url('../../img/Five-pointed_star.svg') no-repeat center center;
