@@ -1,0 +1,14 @@
+.deviceDescription {
+    display: flex;
+    flex-direction: row;
+
+}
+.deviceName{
+    width: 200px;
+}
+.price{
+    width: 70px;
+}
+.quality {
+    width: 40px;
+}

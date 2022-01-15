@@ -4,6 +4,7 @@ import {Context} from "../index";
 import {clearBasket, delOneFromBasket, delSingleFromBasket, getBasket, putInBasket} from "../http/basketAPI";
 import {fetchOneDevice} from "../http/deviceAPI";
 import {observer} from "mobx-react-lite";
+import s from './style/Basket.module.css'
 
 const Basket = observer(({onHide, show}) => {
             const {basket} = useContext(Context)
@@ -28,22 +29,17 @@ const Basket = observer(({onHide, show}) => {
                 )
             }
             const delAllFromBasket = () => {
-                try {
-                    clearBasket({basketId}).then(data => {
-                            // console.log(data)
-                            basket.setBasketEmpty(true)
-                        }
-                    )
-                } catch (e) {
-                    console.log(e)
-                }
-
+                clearBasket({basketId}).then(data => {
+                        // console.log(data)
+                        basket.setBasketEmpty(true)
+                    }
+                )
             }
             const deleteDeviceFromBasket = (deviceId) => {
                 const formData = new FormData()
                 formData.append('deviceId', deviceId)
                 formData.append('basketId', basketId)
-                delOneFromBasket(formData).then(data=> {
+                delOneFromBasket(formData).then(data => {
                     setBasketChange(basketChange => !basketChange)
                 })
 
@@ -51,15 +47,15 @@ const Basket = observer(({onHide, show}) => {
             const minus = (deviceId) => {
                 for (let i = 0; i < basketInfo.length; i++) {
                     if (basketInfo[i].deviceId === deviceId) {
-                        return delSingleFromBasket({id:basketInfo[i].id}).then(data=>
-                            setBasketChange(basketChange=>!basketChange)
+                        return delSingleFromBasket({id: basketInfo[i].id}).then(data =>
+                            setBasketChange(basketChange => !basketChange)
                         )
                     }
                 }
 
             }
 
-
+//function that makes new array of devices from received data, counts quality of each device and sum:
             function makePriceList(array) {
                 let b = []
                 let c = array
@@ -131,25 +127,32 @@ const Basket = observer(({onHide, show}) => {
                     <Modal.Body>
                         {basket.basketEmpty === true ? <div>Корзина пуста</div> : <ListGroup>
                             {priceList.map((device, index) =>
-                                <div key={device.id + device.name} style={{display: 'flex', flexdirection: 'raw'}}>
-                                    <ListGroup.Item
-                                        key={device.id}
-                                        variant={index % 2 === 0 ? 'success' : 'light'}>
+                                <div key={device.id + device.name} className={s.deviceDescription}>
+                                    <ListGroup.Item key={device.id}
+                                                    variant={index % 2 === 0 ? 'success' : 'light'}>
+                                        <input type="text" className={s.deviceName}
+                                               key={device.id + device.name}
+                                               defaultValue={device.name}/>
+                                        <input type="text" className={s.price}
+                                               key={device.id + device.price}
+                                               defaultValue={device.price}/>
+                                        <Button variant="outline-danger" size={"sm"} onClick={() => {
+                                            minus(device.id)
+                                        }}>−</Button>
+                                        <input type="text" className={s.quality}
+                                               key={device.id + device.quality}
+                                               defaultValue={device.quality}/>
+                                        <Button variant="outline-danger" size={"sm"} onClick={() => {
+                                            plus(device.id)
+                                        }}>+</Button>
 
-                                        Название: {device.name}
-                                        Цена: {device.price}
+                                        Сумма: {device.summ}
+
+                                        <Button variant="outline-danger" onClick={() => {
+                                            deleteDeviceFromBasket(device.id)
+                                        }}>Удалить из корзины</Button>
+
                                     </ListGroup.Item>
-                                    <Button variant="outline-danger" onClick={() => {
-                                        minus(device.id)
-                                    }}>−</Button>
-                                    Количество: {device.quality}
-                                    <Button variant="outline-danger" onClick={() => {
-                                        plus(device.id)
-                                    }}>+</Button>
-                                    Сумма: {device.summ}
-                                    <Button variant="outline-danger" onClick={() => {
-                                        deleteDeviceFromBasket(device.id)
-                                    }}>Удалить из корзины</Button>
                                 </div>
                             )}
                             <ListGroup.Item variant="info">Итого: {totalSum}</ListGroup.Item>
