@@ -5,7 +5,7 @@ import {ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE} from "../utils/consts";
 import {NavLink} from "react-router-dom";
 import {useNavigate} from "react-router";
 import {observer} from "mobx-react-lite";
-
+import s from './style/NavBar.module.css'
 
 const NavBar = observer(({openBasket}) => {
     const {user} = useContext(Context)
@@ -22,7 +22,9 @@ const NavBar = observer(({openBasket}) => {
         <Navbar bg="dark" variant="dark">
             <Container>
 
-                <NavLink style={{color: "white", textDecoration: "none"}} to={SHOP_ROUTE}> Nice Device </NavLink>
+                <NavLink
+                    className={s.titleNiceDevice}
+                     to={SHOP_ROUTE}> Nice Device </NavLink>
                 <Nav className="ml-auto" style={{color: "white"}}>
                     {user.isAdmin &&
                         <>
@@ -53,7 +55,6 @@ const NavBar = observer(({openBasket}) => {
                                 onClick={() =>openBasket()
                                 }>🛒</Button>
                     </div>
-
 
                 </Nav>
             </Container>
