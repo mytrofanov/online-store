@@ -29,7 +29,7 @@ const TypeBar = observer(() => {
 
             </ListGroup>
             <div className={s.filterModule}>
-                <Button  variant="secondary" onClick={() => {
+                <Button  variant="dark" onClick={() => {
                     clearFilters()
                 }}
                 >Сбросить все фильтры</Button>
