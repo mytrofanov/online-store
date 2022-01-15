@@ -127,12 +127,11 @@ const Basket = observer(({onHide, show}) => {
                     <Modal.Body>
                         {basket.basketEmpty === true ? <div>Корзина пуста</div> : <ListGroup>
                             {priceList.map((device, index) =>
-                                <div key={device.id + device.name} className={s.deviceDescription}>
-                                    <ListGroup.Item key={device.id}
+                                    <ListGroup.Item key={device.id} className={'d-flex align-content-md-between'}
                                                     variant={index % 2 === 0 ? 'success' : 'light'}>
-                                        <input type="text" className={s.deviceName}
-                                               key={device.id + device.name}
-                                               defaultValue={device.name}/>
+
+                                        <b className={s.deviceName}>{device.name} </b>
+
                                         <input type="text" className={s.price}
                                                key={device.id + device.price}
                                                defaultValue={device.price}/>
@@ -145,17 +144,18 @@ const Basket = observer(({onHide, show}) => {
                                         <Button variant="outline-danger" size={"sm"} onClick={() => {
                                             plus(device.id)
                                         }}>+</Button>
+                                        <input type="text" className={s.summ}
+                                               key={device.id + device.summ}
+                                               defaultValue={device.summ}/>
 
-                                        Сумма: {device.summ}
-
-                                        <Button variant="outline-danger" onClick={() => {
-                                            deleteDeviceFromBasket(device.id)
-                                        }}>Удалить из корзины</Button>
+                                        {/*<Button variant="outline-danger"  size={"sm"}   onClick={() => {*/}
+                                        {/*    deleteDeviceFromBasket(device.id)*/}
+                                        {/*}}>Удалить из корзины</Button>*/}
 
                                     </ListGroup.Item>
-                                </div>
+
                             )}
-                            <ListGroup.Item variant="info">Итого: {totalSum}</ListGroup.Item>
+                            <ListGroup.Item variant="info"> <b className={s.totalSum}>Итого: {totalSum}</b></ListGroup.Item>
                         </ListGroup>
                         }
 

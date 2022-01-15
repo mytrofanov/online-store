@@ -3,12 +3,25 @@
     flex-direction: row;
 
 }
-.deviceName{
-    width: 200px;
+
+.deviceName {
+    width: 70%;
 }
-.price{
-    width: 70px;
+
+.price {
+    width: 10%;
+    text-align: center;
 }
+
 .quality {
-    width: 40px;
+    width: 3%;
+    text-align: center;
+}
+
+.summ {
+    width: 15%;
+    text-align: center;
+}
+.totalSum{
+    margin-left: 82%;
 }
