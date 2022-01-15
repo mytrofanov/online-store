@@ -73,7 +73,7 @@ const DevicePage = observer(() => {
                             <Card
                                 className="d-flex flex-column align-items-center justify-content-around">
                                 <div className={s.addToBasketCard}>
-                                    <h3>{oneDevice.price} грн.</h3>
+                                    <h3 className={s.price}>{oneDevice.price} грн.</h3>
                                     <Button variant={"outline-dark"}
                                             onClick={() => {
                                                 if (basket.basketId) {
