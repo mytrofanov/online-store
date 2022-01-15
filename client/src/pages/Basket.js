@@ -22,7 +22,7 @@ const Basket = observer(({onHide, show}) => {
                 formData.append('deviceId', deviceId)
                 formData.append('basketId', basketId)
                 putInBasket(formData).then(data => {
-                        console.log(data)
+                        // console.log(data)
                         setBasketChange(basketChange => !basketChange)
                     }
                 )
