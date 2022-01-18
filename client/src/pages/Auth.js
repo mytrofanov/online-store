@@ -101,14 +101,16 @@ const Auth = observer(() => {
                         setPassword(e.target.value)
                     }}
                     />
-                    <Form.Control
-                        className="mt-3"
-                        placeholder="Ваша роль"
-                        type="text"
-                        value={role} onChange={(e) => {
-                        setRole(e.target.value)
-                    }}
-                    />
+                    {!isLoginPath &&
+                        <Form.Control
+                            className="mt-3"
+                            placeholder="Ваша роль"
+                            type="text"
+                            value={role} onChange={(e) => {
+                            setRole(e.target.value)
+                        }}
+                        />
+                    }
 
 
 
