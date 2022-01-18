@@ -101,7 +101,7 @@ const Auth = observer(() => {
                         setPassword(e.target.value)
                     }}
                     />
-                    {user.isAdmin && <Form.Control
+                    <Form.Control
                         className="mt-3"
                         placeholder="Ваша роль"
                         type="text"
@@ -109,7 +109,7 @@ const Auth = observer(() => {
                         setRole(e.target.value)
                     }}
                     />
-                    } {/*only Admin should see this field*/}
+
 
 
                     <Row className="d-flex justify-content-between p-lg-3">
