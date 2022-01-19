@@ -127,25 +127,25 @@ const Basket = observer(({onHide, show}) => {
                     <Modal.Body>
                         {basket.basketEmpty === true ? <div>Корзина пуста</div> : <ListGroup>
                             {priceList.map((device, index) =>
-                                    <ListGroup.Item key={device.id} className={'d-flex align-content-md-between'}
+                                    <ListGroup.Item key={device.id+Number(Math.random()*10)} className={'d-flex align-content-md-between'}
                                                     variant={index % 2 === 0 ? 'success' : 'light'}>
 
                                         <b className={s.deviceName}>{device.name} </b>
 
                                         <input type="text" className={s.price}
-                                               key={device.id + device.price}
+                                               key={device.id + device.price+Number(Math.random()*10)}
                                                defaultValue={device.price}/>
                                         <Button variant="outline-danger" size={"sm"} onClick={() => {
                                             minus(device.id)
                                         }}>−</Button>
                                         <input type="text" className={s.quality}
-                                               key={device.id + device.quality}
+                                               key={device.id + device.quality+Number(Math.random()*10)}
                                                defaultValue={device.quality}/>
                                         <Button variant="outline-danger" size={"sm"} onClick={() => {
                                             plus(device.id)
                                         }}>+</Button>
                                         <input type="text" className={s.summ}
-                                               key={device.id + device.summ}
+                                               key={device.id + device.summ+Number(Math.random()*10)}
                                                defaultValue={device.summ}/>
 
                                         {/*<Button variant="outline-danger"  size={"sm"}   onClick={() => {*/}
