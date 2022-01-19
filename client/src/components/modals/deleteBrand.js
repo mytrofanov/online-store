@@ -4,7 +4,7 @@ import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 import {deleteBrand} from "../../http/deviceAPI";
 
-const DeleteBrand = observer(({show, onHide, setInfoToShow,setInfoVisible}) => {
+const DeleteBrand = observer(({show, onHide, setInfoToShow,setInfoVisible, setSmthChanged}) => {
 
     const {device} = useContext(Context)
 
@@ -12,8 +12,10 @@ const DeleteBrand = observer(({show, onHide, setInfoToShow,setInfoVisible}) => {
         deleteBrand({name: name}).then(data =>
             setInfoToShow(data.message)
         )
+        setSmthChanged(smthChanged => !smthChanged)
         onHide()
         setInfoVisible(true)
+
     }
     const name = device.selectedBrand.name
 

@@ -2,19 +2,29 @@ import React, {useState} from 'react';
 import {Button, Form, Modal} from "react-bootstrap";
 import {createType} from "../../http/deviceAPI";
 
-const CreateType = ({show, onHide, setInfoToShow,setInfoVisible }) => {
+const CreateType = ({show, onHide, setInfoToShow, setInfoVisible, setSmthChanged, types}) => {
     const [value, setValue] = useState('')
 
+
     const addType = () => {
-        createType({name: value}).then(data => {
-                setValue('')
-                setInfoToShow('Новый тип ' + data.name + ' успешно создан!')
-            }
-        )
-        onHide()
-        setInfoVisible(true)
+        if (types.includes(value)) {
+            setInfoToShow('Тип ' + value + ' уже существует!')
+            setInfoVisible(true)
+        }
+        if (!types.includes(value)) {
+            createType({name: value}).then(data => {
+                    setValue('')
+                    setInfoToShow('Новый тип ' + data.name + ' успешно создан!')
+                    setSmthChanged(smthChanged => !smthChanged)
+                }
+            )
+            onHide()
+            setInfoVisible(true)
+        }
+
 
     }
+
 
     return (
         <Modal

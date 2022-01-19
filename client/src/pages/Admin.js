@@ -1,21 +1,14 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, Container} from "react-bootstrap";
 import CreateBrand from "../components/modals/createBrand";
 import CreateType from "../components/modals/createType";
 import CreateDevice from "../components/modals/createDevice";
 import DeleteType from "../components/modals/deleteType";
-import * as PropTypes from "prop-types";
 import DeleteBrand from "../components/modals/deleteBrand";
 import InfoModal from "../components/modals/infoModal";
+import {fetchBrands, fetchTypes} from "../http/deviceAPI";
+import {Context} from "../index";
 
-function DeleteTypeBrand() {
-    return null;
-}
-
-DeleteTypeBrand.propTypes = {
-    show: PropTypes.bool,
-    onHide: PropTypes.func
-};
 const Admin = () => {
     let [brandVisible, setBrandVisible] = useState(false)
     let [delBrandVisible, setDelBrandVisible] = useState(false)
@@ -24,6 +17,23 @@ const Admin = () => {
     let [deviceVisible, setDeviceVisible] = useState(false)
     let [infoVisible, setInfoVisible] = useState(false)
     let [infoToShow, setInfoToShow] = useState('')
+    let [smthChanged, setSmthChanged] = useState(false)
+    let [types, setTypes] = useState([])
+    let [brands, setBrands] = useState([])
+    const {device} = useContext(Context)
+
+    useEffect(() => {
+        fetchTypes().then(data => {
+            setTypes([])
+            data.map(i =>setTypes(value=> value.concat(i.name)))
+            device.setTypes(data)
+        })
+        fetchBrands().then(data => {
+            setBrands([])
+            data.map(i =>setBrands(value=> value.concat(i.name)))
+            device.setBrands(data)
+        })
+    }, [smthChanged])
 
     return (
         <Container className="d-flex flex-column">
@@ -52,19 +62,26 @@ const Admin = () => {
 
 
             <CreateBrand show={brandVisible}
+                         brands={brands}
                          setInfoToShow={setInfoToShow}
                          setInfoVisible={setInfoVisible}
+                         setSmthChanged={setSmthChanged}
                          onHide={()=>{setBrandVisible(false)}}/>
             <DeleteBrand setInfoToShow={setInfoToShow}
                          setInfoVisible={setInfoVisible}
+                         setSmthChanged={setSmthChanged}
                          show={delBrandVisible} onHide={()=>{setDelBrandVisible(false)}}/>
             <CreateType show={typeVisible}
+                        types = {types}
                         setInfoToShow={setInfoToShow}
                         setInfoVisible={setInfoVisible}
+                        infoVisible = {infoVisible}
+                        setSmthChanged={setSmthChanged}
                         onHide={()=>{setTypeVisible(false)}}/>
             <DeleteType show={deleteTypeVisible}
                         setInfoToShow={setInfoToShow}
                         setInfoVisible={setInfoVisible}
+                        setSmthChanged={setSmthChanged}
                         onHide={()=>{setDelTypeVisible(false)}}/>
             <CreateDevice show={deviceVisible}
                           setInfoToShow={setInfoToShow}

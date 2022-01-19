@@ -1,10 +1,10 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {Alert, Button, ListGroup, Modal} from "react-bootstrap";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 import {deleteType} from "../../http/deviceAPI";
 
-const DeleteType = observer(({show, onHide, setInfoToShow,setInfoVisible}) => {
+const DeleteType = observer(({show, onHide, setInfoToShow,setInfoVisible, setSmthChanged}) => {
     const {device} = useContext(Context)
 
 
@@ -12,6 +12,7 @@ const DeleteType = observer(({show, onHide, setInfoToShow,setInfoVisible}) => {
         deleteType({name: name}).then(data =>
             setInfoToShow(data.message)
         )
+        setSmthChanged(smthChanged => !smthChanged)
         onHide()
         setInfoVisible(true)
     }
