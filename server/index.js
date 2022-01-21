@@ -27,7 +27,7 @@ const start = async () => {
       await sequelize.sync()
       app.listen(PORT, ()=>{console.log("Server started on PORT: ", PORT)})
   } catch (e) {
-      console.log(e)
+      console.log('Unable to connect to the database:', e)
   }
     
 }
