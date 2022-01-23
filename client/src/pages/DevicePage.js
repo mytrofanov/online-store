@@ -50,7 +50,7 @@ const DevicePage = observer(() => {
                 })
             }
             const imageOfDevice = (oneDevice.img === undefined) ?
-                noImage : process.env.REACT_APP_API_URL + oneDevice.img
+                noImage : process.env.REACT_APP_API_URL + '/online-store/server/' + oneDevice.img
 
 
             return (

@@ -12,7 +12,7 @@ const DeviceItem = ({device, brands}) => {
             navigate(DEVICE_ROUTE + '/' + device.id)
         }}>
             <Card className={s.card} border={'light'}>
-                <Image src={process.env.REACT_APP_API_URL + device.img} className={s.image}/>
+                <Image src={process.env.REACT_APP_API_URL + '/online-store/server/static' + device.img} className={s.image}/>
                 <div className="text-black-50 mt-1 d-flex justify-content-between align-items-center">
 
                     {  brands.map(brand =>
