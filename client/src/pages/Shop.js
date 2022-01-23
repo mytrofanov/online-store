@@ -16,14 +16,25 @@ const Shop = observer(() => {
         fetchTypes().then(data => device.setTypes(data))
         fetchBrands().then(data => device.setBrands(data))
         fetchDevices(null, null, 1, 10).then(data => {
-            device.setDevices(data.rows)
-            device.setTotalCount(data.count)
+            if (data===null || data === undefined){
+                info.setInfoShop('Отсутствует связь с сервером!')
+                info.setInfoShopVisible(true)
+            } else {
+                device.setDevices(data.rows)
+                device.setTotalCount(data.count)
+            }
         })
     }, [])
     useEffect(() => {
         fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit).then(data => {
-            device.setDevices(data.rows)
-            device.setTotalCount(data.count)
+            if (data===null || data === undefined){
+                info.setInfoShop('Отсутствует связь с сервером!')
+                info.setInfoShopVisible(true)
+            } else {
+                device.setDevices(data.rows)
+                device.setTotalCount(data.count)
+            }
+
         })
     }, [device.page, device.selectedType, device.selectedBrand,])
 

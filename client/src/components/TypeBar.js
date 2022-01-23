@@ -14,7 +14,7 @@ const TypeBar = observer(() => {
     return (
         <div>
             <ListGroup>
-                {device.types.map(type =>
+                {device.types !==undefined && device.types.map(type =>
                     <ListGroup.Item key={type.id}
                                     style={{cursor: 'pointer'}}
                                     active={type.id === device.selectedType.id}
