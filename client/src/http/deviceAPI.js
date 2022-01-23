@@ -19,7 +19,6 @@ export const deleteType = async (type) => {
 export const fetchTypes = async () => {
     try {
         let {data} = await $host.get('api/type' )
-        if(data === undefined){data=null}
         return data
     } catch (e) {
         console.log(e)
