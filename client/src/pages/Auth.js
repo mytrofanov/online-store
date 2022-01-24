@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {Button, Card, Container, Form, Row} from "react-bootstrap";
+import {Alert, Button, Card, Container, Form, Row} from "react-bootstrap";
 import {NavLink, useLocation} from "react-router-dom";
 import {useNavigate} from "react-router";
 import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
@@ -8,6 +8,7 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import InfoModal from "../components/modals/infoModal";
 import {getBasketId} from "../http/basketAPI";
+import s from './style/Auth.module.css'
 
 const Auth = observer(() => {
     const {user} = useContext(Context)
@@ -38,19 +39,17 @@ const Auth = observer(() => {
                 let basketId;
                 await login(email, password)
                     .then(async data => {
-                        let userId = data.id
-                        basketId = await getBasketId(userId)
-                        basketId.id !== undefined && basket.setBasketId(basketId.id)
-                        if (data.role === "ADMIN") {
-                            user.setIsAdmin(true)
+                            let userId = data.id
+                            basketId = await getBasketId(userId)
+                            basketId.id !== undefined && basket.setBasketId(basketId.id)
+                            if (data.role === "ADMIN") {
+                                user.setIsAdmin(true)
+                            }
+                            if (data.id) {
+                                user.setUserId(data.id)
+                            }
                         }
-                        if (data.id) {
-                            user.setUserId(data.id)
-                        }
-                    }
-
-                )
-
+                    )
 
 
             } else {
@@ -80,8 +79,16 @@ const Auth = observer(() => {
 
 
     return (
+
+        <div>
+
         <Container className="d-flex justify-content-center align-items-center"
-                   style={{height: window.innerHeight - 54}}>
+                   style={{
+                       // height: window.innerHeight - 54,
+                        marginTop:10
+                   }}
+        >
+
             <Card style={{width: 600}} className="p-5">
                 <h2 className="m-auto">{isLoginPath ? 'Авторизация' : 'Регистрация'}</h2>
                 <Form className="d-flex flex-column">
@@ -113,7 +120,6 @@ const Auth = observer(() => {
                     }
 
 
-
                     <Row className="d-flex justify-content-between p-lg-3">
                         {isLoginPath ? <div>
                                 Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
@@ -138,6 +144,23 @@ const Auth = observer(() => {
                            history(SHOP_ROUTE)
                        }}/> {/*shows the result of any action*/}
         </Container>
+            <div className={s.loginAlert}>
+                <Alert variant="success" style={{fontSize:'small', width:'85%'}}>
+                    <Alert.Heading>Внимание! Это учебный интернет-магазин</Alert.Heading>
+                    <p>
+                        Чтобы протестировать его в роли покупателя зарегистрируйтесь с логином: user1@gmail.com , пароль
+                        12345.
+                    </p>
+                    <p>
+                        Для тестирования в роли администратора зарегистрируйтесь с логином: admin@gmail.com , пароль 12345
+                    </p>
+                    <hr />
+                    <p className="mb-0">
+                        Выберите регистрацию для создания своего пользователя с правами USER или ADMIN!
+                    </p>
+                </Alert>
+            </div>
+        </div>
     );
 });
 

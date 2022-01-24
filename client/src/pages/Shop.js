@@ -22,6 +22,10 @@ const Shop = observer(() => {
             } else {
                 device.setDevices(data.rows)
                 device.setTotalCount(data.count)
+                info.setInfoShop('Внимание! Это учебный интернет-магазин. Чтобы протестировать его в роли покупателя ' +
+                    'зарегистрируйтесь с логином: user1@gmail.com , пароль 12345. Для тестирования в роли администратора' +
+                    ' зарегистрируйтесь с логином: admin@gmail.com , пароль 12345. Эта подсказка будет и на странице авторизации')
+                info.setInfoShopVisible(true)
             }
         })
     }, [])
