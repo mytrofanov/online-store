@@ -12,7 +12,10 @@ const PORT = process.env.PORT || 5000
 const app = express()
 
 
-app.use(cors({origin:"http://nicedevice.top"}))
+app.use(cors({
+    origin:"http://nicedevice.top",
+    credentials: true,
+}))
 app.use(express.json())
 app.use(express.static(path.resolve(__dirname, 'static'))) //for getting img from static folder
 app.use(fileUpload({}))
