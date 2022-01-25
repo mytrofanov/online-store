@@ -13,7 +13,7 @@ const EditDevice = observer(({show, onHide, oneDeviceId}) => {
     const [file, setFile] = useState(null)
     const [changeFile, setChangeFile] = useState(false)
 
-    const imageOfDevice = (file === undefined) ? noImage : process.env.REACT_APP_API_URL + file
+    const imageOfDevice = (file === undefined) ? noImage : process.env.REACT_APP_API_URL + '/' + file
 
     useEffect(() => {
         fetchOneDevice(oneDeviceId).then(data => {

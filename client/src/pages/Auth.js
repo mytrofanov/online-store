@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {Alert, Button, Card, Container, Form, Row} from "react-bootstrap";
+import {Button, Card, Container, Form, Row} from "react-bootstrap";
 import {NavLink, useLocation} from "react-router-dom";
 import {useNavigate} from "react-router";
 import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
@@ -9,6 +9,7 @@ import {Context} from "../index";
 import InfoModal from "../components/modals/infoModal";
 import {getBasketId} from "../http/basketAPI";
 import s from './style/Auth.module.css'
+import InfoWarning from "../components/InfoWarning";
 
 const Auth = observer(() => {
     const {user} = useContext(Context)
@@ -145,21 +146,9 @@ const Auth = observer(() => {
                        }}/> {/*shows the result of any action*/}
         </Container>
             <div className={s.loginAlert}>
-                <Alert variant="success" style={{fontSize:'small', width:'85%'}}>
-                    <Alert.Heading>Внимание! Это учебный интернет-магазин</Alert.Heading>
-                    <p>
-                        Чтобы протестировать его в роли покупателя зарегистрируйтесь с логином: user1@gmail.com , пароль
-                        12345.
-                    </p>
-                    <p>
-                        Для тестирования в роли администратора зарегистрируйтесь с логином: admin@gmail.com , пароль 12345
-                    </p>
-                    <hr />
-                    <p className="mb-0">
-                        Выберите регистрацию для создания своего пользователя с правами USER или ADMIN!
-                    </p>
-                </Alert>
+                <InfoWarning/>
             </div>
+
         </div>
     );
 });

@@ -3,6 +3,7 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import {Button, ListGroup} from "react-bootstrap";
 import s from './style/TypeBar.module.css'
+import InfoWarning from "./InfoWarning";
 
 const TypeBar = observer(() => {
     const {device} = useContext(Context)
@@ -34,6 +35,7 @@ const TypeBar = observer(() => {
                 }}
                 >Сбросить все фильтры</Button>
             </div>
+            <InfoWarning/>
         </div>
 
 
