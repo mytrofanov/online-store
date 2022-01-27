@@ -73,7 +73,7 @@ export const deleteDevice = async (id) => {
         console.log(e)
     }
 }
-export const fetchDevices = async (typeId, brandId, page, limit = 10) => {
+export const fetchDevices = async (typeId, brandId, page, limit ) => {
     try {
         const {data} = await $host.get('api/device', {params:{
                 typeId, brandId, page,limit

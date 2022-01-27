@@ -16,7 +16,7 @@ const Shop = observer(() => {
     useEffect(() => {
         fetchTypes().then(data => device.setTypes(data))
         fetchBrands().then(data => device.setBrands(data))
-        fetchDevices(null, null, 1, 10).then(data => {
+        fetchDevices(null, null, 1, 12).then(data => {
             if (data===null || data === undefined){
                 info.setInfoShop('Отсутствует связь с Базой Данных!')
                 info.setInfoShopVisible(true)
