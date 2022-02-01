@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Image, Row, Tab, Tabs} from "react-bootstrap";
 import noImage from '../img/no-image.png'
 import {useNavigate, useParams} from "react-router";
 import {deleteDevice, fetchOneDevice} from "../http/deviceAPI";
@@ -12,6 +12,8 @@ import {observer} from "mobx-react-lite";
 import {putInBasket} from "../http/basketAPI";
 import s from './style/DevicePage.module.css'
 import InfoModal from "../components/modals/infoModal";
+import ReviewForm from "../components/reviewForm";
+import {createReview} from "../http/reviewAPI";
 
 const DevicePage = observer(() => {
             const [oneDevice, setOneDevices] = useState({info: []})
@@ -25,6 +27,22 @@ const DevicePage = observer(() => {
             const navigate = useNavigate();
 
             let deviceId = Number(id)
+
+        let [rate, setRate] = useState('')
+        let [review, setReview] = useState('')
+        const sendReview = () => {
+            const formData = new FormData()
+            formData.append('rate', rate)
+            formData.append('deviceId', id)
+            formData.append('review', review)
+            try {
+                createReview(formData).then(data => {
+                    console.log(data)
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        }
 
             useEffect(() => {
                 fetchOneDevice(id).then(data => setOneDevices(data))
@@ -121,13 +139,23 @@ const DevicePage = observer(() => {
                         </Col>
                     </Row>
                     <Row className="d-flex flex-column m-3">
-                        <h2>Характеристики</h2>
-                        {oneDevice.info.map((info, index) =>
-                            <Row key={info.id} style={
-                                {background: index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
-                                {info.title} : {info.description}
-                            </Row>
-                        )}
+
+                        <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="mb-3">
+                            <Tab eventKey="home" title="Характеристики">
+                                {oneDevice.info.map((info, index) =>
+                                    <Row key={info.id} style={
+                                        {background: index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
+                                        {info.title} : {info.description}
+                                    </Row>
+                                )}
+                            </Tab>
+                            <Tab eventKey="profile" title="Отзывы">
+                                Оставьте свой отзыв:
+                                <ReviewForm  setRate={setRate} setReview={setReview} sendReview={sendReview}/>
+
+                            </Tab>
+                        </Tabs>
+
                     </Row>
 
                     <EditDevice show={editVisible}

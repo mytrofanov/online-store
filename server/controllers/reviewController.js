@@ -5,8 +5,8 @@ const ApiError = require('../error/ApiError')
 class ReviewController {
     async create(req, res) {
         try {
-            let {rate, review} = req.body
-            const rev = await Rating.create({rate, review})
+            let {rate, deviceId, review} = req.body
+            const rev = await Rating.create({rate, deviceId, review})
             return res.json(rev)
         } catch (e) {
             return res.json(e)
