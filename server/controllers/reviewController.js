@@ -16,14 +16,17 @@ class ReviewController {
     async delete(req, res, next) {
         try {
             const {id} = req.body
-            await Rating.destroy({where: {id}})
-            return next(ApiError.success('Отзыв удален'))
+            if(id) {
+                await Rating.destroy({where: {id}})
+                return next(ApiError.success('Отзыв удален'))
+            }  else return next(ApiError.success('id= ' + id))
+
         }catch (e) {
             return res.json(e)
         }
     }
 
-    async getAllForOneDevice(req, res, next) {
+    async getAllForOneDevice(req, res) {
         try {
             const {deviceId} = req.query
             if (deviceId) {
@@ -31,8 +34,7 @@ class ReviewController {
                     where: {deviceId},
                 })
                 return res.json(reviews)
-            } else  return next(ApiError.success('deviceId = ' + deviceId))
-
+            }
         }catch (e) {
             return res.json(e)
         }

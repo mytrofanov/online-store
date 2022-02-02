@@ -13,7 +13,7 @@ import {putInBasket} from "../http/basketAPI";
 import s from './style/DevicePage.module.css'
 import InfoModal from "../components/modals/infoModal";
 import ReviewForm from "../components/reviewForm";
-import {createReview, fetchReviewsForOneDevice} from "../http/reviewAPI";
+import {createReview, deleteReview, fetchReviewsForOneDevice} from "../http/reviewAPI";
 
 const DevicePage = observer(() => {
             const [oneDevice, setOneDevices] = useState({info: []})
@@ -29,32 +29,49 @@ const DevicePage = observer(() => {
 
             let deviceId = Number(id)
 
-        let [rate, setRate] = useState('')
-        let [review, setReview] = useState('')
-        const sendReview = () => {
-            const formData = new FormData()
-            formData.append('rate', rate)
-            formData.append('deviceId', id)
-            formData.append('review', review)
-            formData.append('userId', user.userId)
-            try {
-                createReview(formData).then(data => {
-                    console.log(data)
-                })
-            } catch (e) {
-                console.log(e)
-            }
-        }
+            let [rate, setRate] = useState('')
+            let [rating, setRating] = useState(null)
+            let [review, setReview] = useState('')
+            let [madeReview, setMadeReview] = useState(false)
 
+            const sendReview = () => {
+                const formData = new FormData()
+                formData.append('rate', rate)
+                formData.append('deviceId', id)
+                formData.append('review', review)
+                formData.append('userId', user.userId)
+                try {
+                    createReview(formData).then(data => {
+                        console.log(data)
+                        setMadeReview(true)
+                    })
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+            const delMyReview = (id) => {
+                deleteReview({id}).then(data => {
+                        setMadeReview(false)
+                    }
+                )
+            }
             useEffect(() => {
                 fetchOneDevice(id).then(data => setOneDevices(data))
-                fetchReviewsForOneDevice(id).then(data=> {
-                    if (data){
+                fetchReviewsForOneDevice(id).then(data => {
+                    if (data) {
                         console.log(data)
                         reviews.setOneDeviceReviews(data)
+                        let sumOfRates = 0
+                        data.forEach(item => {
+                            if (item.userId === user.userId) {
+                                setMadeReview(true)
+                            }
+                            sumOfRates += item.rate
+                        })
+                        setRating(sumOfRates/data.length)
                     }
                 })
-            }, [editVisible, editInfoVisible, infoAddVisible, id, review])
+            }, [editVisible, editInfoVisible, infoAddVisible, id, review, reviews, madeReview])
 
             const delDevice = (oneDeviceId) => {
                 deleteDevice({id: oneDeviceId}).then(data => {
@@ -76,7 +93,7 @@ const DevicePage = observer(() => {
                 })
             }
             const imageOfDevice = (oneDevice.img === undefined) ?
-                noImage : process.env.REACT_APP_API_URL  +  oneDevice.img
+                noImage : process.env.REACT_APP_API_URL + oneDevice.img
 
 
             return (
@@ -91,7 +108,7 @@ const DevicePage = observer(() => {
                                     {oneDevice.name}
                                 </h2>
                                 <div className={s.rating}>
-                                    {oneDevice.rating}
+                                    {rating}
                                 </div>
                             </Row>
                         </Col>
@@ -105,7 +122,7 @@ const DevicePage = observer(() => {
                                                 if (basket.basketId) {
                                                     putDeviceInBasket(deviceId, basket.basketId)
                                                 }
-                                                !basket.basketId &&  info.setInfoShopVisible(true)
+                                                !basket.basketId && info.setInfoShopVisible(true)
                                                 info.setInfoShop('Пользователь не авторизован')
                                             }}
                                     >Добавить в корзину</Button>
@@ -158,17 +175,28 @@ const DevicePage = observer(() => {
                                 )}
                             </Tab>
                             <Tab eventKey="profile" title="Отзывы">
-                                {reviews.oneDeviceReviews && reviews.oneDeviceReviews.map((rev,index)=>{
-                                    <Row key={rev.id} style={
+                                {reviews.oneDeviceReviews.map((rev, index) =>
+                                    <Row key={rev.id + index} style={
                                         {background: index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
-                                        {rev.review} : {rev.rate}
+                                        {rev.review}
+                                        {
+                                            rev.userId === user.userId && <Button variant={"outline-secondary"} size="sm"
+                                                                                  className={'mt-2'}
+                                                                                  onClick={() => {
+                                                                                      delMyReview(rev.id)
+                                                                                  }}
+                                            >Удалить мой комментарий</Button>
+                                        }
                                     </Row>
-                                    }
                                 )
+                                }
+                                {!madeReview && <div className={s.newReview}>
+                                    <h5>Оставьте свой отзыв:</h5>
+                                    <ReviewForm setRate={setRate} setReview={setReview} sendReview={sendReview}/>
+                                </div>
 
                                 }
-                                Оставьте свой отзыв:
-                                <ReviewForm  setRate={setRate} setReview={setReview} sendReview={sendReview}/>
+
 
                             </Tab>
                         </Tabs>

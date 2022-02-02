@@ -4,6 +4,7 @@
     font-size: 32px;
     padding-left: 15%;
 }
+
 .price {
     margin-left: 7%;
     margin-top: 10%;
@@ -13,14 +14,22 @@
     max-width: 300px;
     max-height: 300px;
 }
+
 .rating {
     background: url('../../img/Five-pointed_star.svg') no-repeat center center;
     width: 150px;
     height: 150px;
     background-size: cover;
+    padding-top: 10%;
     font-size: 55px;
+    text-align: center;
+    font-weight: bold;
 }
 
 .adminMenu {
     width: 300px;
+}
+
+.newReview {
+    padding-top: 10px;
 }
