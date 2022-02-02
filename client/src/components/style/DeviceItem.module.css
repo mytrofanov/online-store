@@ -1,12 +1,12 @@
 .image {
     max-width: 150px;
     max-height: 150px;
-    z-index: 1;
 }
 .card {
     width: 150px;
     cursor:pointer;
 }
 .rating {
-    text-align: right;
+    text-align: left;
+    color: darkorange;
 }
