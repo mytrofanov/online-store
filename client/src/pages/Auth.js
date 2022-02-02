@@ -26,7 +26,7 @@ const Auth = observer(() => {
         if (info.infoAuth.length > 1) {
             info.setInfoAuthVisible(true)
         }
-        if (info.infoAuthVisible === false) {
+        if (info.infoAuthVisible === false && user.userId) {
             info.setInfoAuth('')
             history(SHOP_ROUTE)
         }
@@ -35,11 +35,15 @@ const Auth = observer(() => {
     const click = async () => {
         try {
             let data;
-
             if (isLoginPath) {
                 let basketId;
                 await login(email, password)
                     .then(async data => {
+                        if (data.status === 403) {
+                            info.setInfoAuth('Доступ запрещен: ' + data.data.message)
+                            condition()
+                        }
+                        if (data.id) {
                             let userId = data.id
                             basketId = await getBasketId(userId)
                             basketId.id !== undefined && basket.setBasketId(basketId.id)
@@ -50,9 +54,8 @@ const Auth = observer(() => {
                                 user.setUserId(data.id)
                             }
                         }
+                        }
                     )
-
-
             } else {
                 data = await registration(email, password, role)
                 if (data.id !== undefined) {
@@ -67,14 +70,13 @@ const Auth = observer(() => {
                 }
             }
             user.setUser(user)
-            user.setIsAuth(true)
-            user.setTriedToLogin(true)
-            if (isLoginPath) {
+            user.userId && user.setIsAuth(true)
+            user.userId && user.setTriedToLogin(true)
+            if (isLoginPath && user.userId) {
                 history(SHOP_ROUTE)
             }
         } catch (e) {
             console.log(e)
-
         }
     }
 
@@ -142,7 +144,6 @@ const Auth = observer(() => {
                        infoMessage={info.infoAuth}
                        onHide={() => {
                            info.setInfoAuthVisible(false)
-                           history(SHOP_ROUTE)
                        }}/> {/*shows the result of any action*/}
         </Container>
             <div className={s.loginAlert}>

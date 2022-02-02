@@ -35,6 +35,7 @@ const DevicePage = observer(() => {
             formData.append('rate', rate)
             formData.append('deviceId', id)
             formData.append('review', review)
+            formData.append('userId', user.userId)
             try {
                 createReview(formData).then(data => {
                     console.log(data)

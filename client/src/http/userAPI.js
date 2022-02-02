@@ -13,11 +13,13 @@ export const registration = async (email, password, role) => {
 }
 export const login = async (email, password) => {
     try {
-        const {data} = await $host.post('api/user/login', {email, password})
-        localStorage.setItem('token', data.token)
-        return jwtDecode(data.token)
+        const response = await $host.post('api/user/login', {email, password})
+        localStorage.setItem('token', response.data.token)
+        return jwtDecode(response.data.token)
     } catch (e) {
-        console.log(e)
+        if(e.response.status === 403) {
+            return e.response
+        }
     }
 
 
