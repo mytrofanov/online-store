@@ -23,12 +23,24 @@ class ReviewController {
         }
     }
 
+    async getAllForOneDevice(req, res, next) {
+        try {
+            const {deviceId} = req.query
+            if (deviceId) {
+                const reviews = await Rating.findAll({
+                    where: {deviceId},
+                })
+                return res.json(reviews)
+            } else  return next(ApiError.success('deviceId = ' + deviceId))
+
+        }catch (e) {
+            return res.json(e)
+        }
+
+    }
     async getAll(req, res) {
         try {
-            const {deviceId} = req.body
-            const reviews = await Rating.findAll({
-                where: {deviceId},
-            })
+            const reviews = await Rating.findAll()
             return res.json(reviews)
         }catch (e) {
             return res.json(e)

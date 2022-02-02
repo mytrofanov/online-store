@@ -16,9 +16,17 @@ export const deleteReview = async (id) => {
         console.log(e)
     }
 }
-export const fetchReviews = async (deviceID) => {
+export const fetchAllReviews = async () => {
     try {
-        let {data} = await $host.get('api/review/get', deviceID )
+        let {data} = await $host.get('api/review/get' )
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const fetchReviewsForOneDevice = async (deviceId) => {
+    try {
+        let {data} = await $host.get('api/review/getOneDev/' , {params:{deviceId}})
         return data
     } catch (e) {
         console.log(e)

@@ -26,7 +26,7 @@ const Auth = observer(() => {
         if (info.infoAuth.length > 1) {
             info.setInfoAuthVisible(true)
         }
-        if (info.infoAuthVisible === false && user.userId) {
+        if (info.infoAuthVisible === false && user.isAuth) {
             info.setInfoAuth('')
             history(SHOP_ROUTE)
         }
@@ -72,7 +72,7 @@ const Auth = observer(() => {
             user.setUser(user)
             user.userId && user.setIsAuth(true)
             user.userId && user.setTriedToLogin(true)
-            if (isLoginPath && user.userId) {
+            if (isLoginPath && user.isAuth) {
                 history(SHOP_ROUTE)
             }
         } catch (e) {

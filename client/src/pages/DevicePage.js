@@ -13,7 +13,7 @@ import {putInBasket} from "../http/basketAPI";
 import s from './style/DevicePage.module.css'
 import InfoModal from "../components/modals/infoModal";
 import ReviewForm from "../components/reviewForm";
-import {createReview} from "../http/reviewAPI";
+import {createReview, fetchReviewsForOneDevice} from "../http/reviewAPI";
 
 const DevicePage = observer(() => {
             const [oneDevice, setOneDevices] = useState({info: []})
@@ -24,6 +24,7 @@ const DevicePage = observer(() => {
             const {id} = useParams()
             const {user} = useContext(Context)
             const {info} = useContext(Context)
+            const {reviews} = useContext(Context)
             const navigate = useNavigate();
 
             let deviceId = Number(id)
@@ -47,7 +48,13 @@ const DevicePage = observer(() => {
 
             useEffect(() => {
                 fetchOneDevice(id).then(data => setOneDevices(data))
-            }, [editVisible, editInfoVisible, infoAddVisible, id])
+                fetchReviewsForOneDevice(id).then(data=> {
+                    if (data){
+                        console.log(data)
+                        reviews.setOneDeviceReviews(data)
+                    }
+                })
+            }, [editVisible, editInfoVisible, infoAddVisible, id, review])
 
             const delDevice = (oneDeviceId) => {
                 deleteDevice({id: oneDeviceId}).then(data => {
@@ -151,6 +158,15 @@ const DevicePage = observer(() => {
                                 )}
                             </Tab>
                             <Tab eventKey="profile" title="Отзывы">
+                                {reviews.oneDeviceReviews && reviews.oneDeviceReviews.map((rev,index)=>{
+                                    <Row key={rev.id} style={
+                                        {background: index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
+                                        {rev.review} : {rev.rate}
+                                    </Row>
+                                    }
+                                )
+
+                                }
                                 Оставьте свой отзыв:
                                 <ReviewForm  setRate={setRate} setReview={setReview} sendReview={sendReview}/>
 

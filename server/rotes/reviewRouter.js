@@ -6,6 +6,7 @@ const checkRole = require('../middleware/checkRoleMiddleware')
 router.post('/', checkRole('USER'), reviewController.create )
 router.post('/review/del', checkRole('USER'), reviewController.delete )
 router.get('/review/get', reviewController.getAll )
+router.get('/getOneDev', reviewController.getAllForOneDevice )
 
 
 

@@ -5,6 +5,7 @@ import UserStore from "./store/UserStore";
 import DeviceStore from "./store/DeviceStore";
 import InfoStore from "./store/InfoStore";
 import BasketStore from "./store/BasketStore";
+import ReviewStore from "./store/ReviewStore";
 
 export const Context = createContext(null)
 
@@ -15,7 +16,8 @@ ReactDOM.render(
         user: new UserStore(),
         info: new InfoStore(),
         device: new DeviceStore(),
-        basket: new BasketStore()
+        basket: new BasketStore(),
+        reviews: new ReviewStore()
     }}>
         <App/>
     </Context.Provider>,
