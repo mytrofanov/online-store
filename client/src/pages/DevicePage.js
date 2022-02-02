@@ -42,7 +42,6 @@ const DevicePage = observer(() => {
                 formData.append('userId', user.userId)
                 try {
                     createReview(formData).then(data => {
-                        console.log(data)
                         setMadeReview(true)
                     })
                 } catch (e) {
@@ -59,16 +58,16 @@ const DevicePage = observer(() => {
                 fetchOneDevice(id).then(data => setOneDevices(data))
                 fetchReviewsForOneDevice(id).then(data => {
                     if (data) {
-                        console.log(data)
                         reviews.setOneDeviceReviews(data)
                         let sumOfRates = 0
+
                         data.forEach(item => {
                             if (item.userId === user.userId) {
                                 setMadeReview(true)
                             }
                             sumOfRates += item.rate
                         })
-                        setRating(sumOfRates/data.length)
+                        setRating(sumOfRates/data.length || 0)
                     }
                 })
             }, [editVisible, editInfoVisible, infoAddVisible, id, review, reviews, madeReview])
@@ -108,7 +107,7 @@ const DevicePage = observer(() => {
                                     {oneDevice.name}
                                 </h2>
                                 <div className={s.rating}>
-                                    {rating}
+                                    {rating > 0 ? rating.toFixed(1) : ''}
                                 </div>
                             </Row>
                         </Col>
@@ -180,12 +179,13 @@ const DevicePage = observer(() => {
                                         {background: index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
                                         {rev.review}
                                         {
-                                            rev.userId === user.userId && <Button variant={"outline-secondary"} size="sm"
+                                            rev.userId === user.userId || user.isAdmin
+                                            && <Button variant={"outline-secondary"} size="sm"
                                                                                   className={'mt-2'}
                                                                                   onClick={() => {
                                                                                       delMyReview(rev.id)
                                                                                   }}
-                                            >Удалить мой комментарий</Button>
+                                            >Удалить комментарий</Button>
                                         }
                                     </Row>
                                 )

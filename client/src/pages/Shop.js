@@ -8,10 +8,12 @@ import {Context} from "../index";
 import {fetchBrands, fetchDevices, fetchTypes} from "../http/deviceAPI";
 import Pages from "../components/pages";
 import InfoModal from "../components/modals/infoModal";
+import {fetchAllReviews} from "../http/reviewAPI";
 
 const Shop = observer(() => {
     const {device} = useContext(Context)
     const {info} = useContext(Context)
+    const {reviews} = useContext(Context)
 
     useEffect(() => {
         fetchTypes().then(data => device.setTypes(data))
@@ -25,6 +27,9 @@ const Shop = observer(() => {
                 device.setTotalCount(data.count)
             }
         })
+        fetchAllReviews().then(data=>{
+            reviews.setReviews(data)
+        })
     }, [])
     useEffect(() => {
         fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit).then(data => {
@@ -36,6 +41,9 @@ const Shop = observer(() => {
                 device.setTotalCount(data.count)
             }
 
+        })
+        fetchAllReviews().then(data=>{
+            reviews.setReviews(data)
         })
     }, [device.page, device.selectedType, device.selectedBrand,])
 
