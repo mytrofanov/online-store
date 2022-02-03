@@ -63,7 +63,8 @@ const DeviceItem = ({device, brands, reviews}) => {
                 </div>
                 <div className={s.rating}>
                     <RatingCount deviceId = {device.id}/> </div>
-                <div> {device.name} </div>
+                <div className={s.deviceName}> {device.name} </div>
+                <div> {device.price} грн </div>
             </Card>
 
         </Col>

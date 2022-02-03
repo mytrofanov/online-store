@@ -4,6 +4,7 @@ import {Context} from "../index";
 import {Button, ListGroup} from "react-bootstrap";
 import s from './style/TypeBar.module.css'
 import InfoWarning from "./InfoWarning";
+import BrandBar from "./BrandBar";
 
 const TypeBar = observer(() => {
     const {device} = useContext(Context)
@@ -35,6 +36,9 @@ const TypeBar = observer(() => {
                 }}
                 >Сбросить все фильтры</Button>
             </div>
+
+            <BrandBar/>
+
             <InfoWarning/>
         </div>
 
