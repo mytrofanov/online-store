@@ -50,7 +50,7 @@ const DevicePage = observer(() => {
             }
             const delMyReview = (id) => {
                 deleteReview({id}).then(data => {
-                        setMadeReview(false)
+                        setMadeReview(value=>!value)
                     }
                 )
             }
