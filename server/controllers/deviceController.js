@@ -35,7 +35,7 @@ class DeviceController {
             const {img} = req.files
             let fileName = uuid.v4() + '.jpeg'
             img.mv(path.resolve(__dirname, '..', 'static', fileName))  //removes files to /static
-            await Device.update({name, price, brandId, typeId,img: fileName},
+            await Device.update({name, price, brandId, typeId, img: fileName},
                 {where: {id}})
 
             return next(ApiError.success('Изменения внесены'))
@@ -43,6 +43,7 @@ class DeviceController {
             next(ApiError.badRequest(e.message))
         }
     }
+
     async delete(req, res, next) {
         try {
             let {id} = req.body
@@ -54,7 +55,7 @@ class DeviceController {
     }
 
     async getAll(req, res) {
-        let {brandId, typeId, limit, page} = req.query
+        let {brandId, typeId, limit, page, expensive, cheap} = req.query
         page = page || 1
         limit = limit || 9
         let offset = page * limit - limit
@@ -63,16 +64,64 @@ class DeviceController {
         if (!brandId && !typeId) {
             devices = await Device.findAndCountAll({limit, offset})
         }
+        if (!brandId && !typeId && expensive === 'expensive') {
+            devices = await Device.findAndCountAll({
+                limit, offset,
+                order: [['price', 'DESC']],
+            })
+        }
+        if (!brandId && !typeId && cheap === 'cheap') {
+            devices = await Device.findAndCountAll({
+                limit, offset,
+                order: [['price', 'ASC']],
+            })
+        }
         if (brandId && !typeId) {
             devices = await Device.findAndCountAll({where: {brandId}, limit, offset})
+        }
+        if (brandId && !typeId && expensive === 'expensive') {
+            devices = await Device.findAndCountAll({
+                where: {brandId}, limit, offset,
+                order: [['price', 'DESC']],
+            })
+        }
+        if (brandId && !typeId && cheap === 'cheap') {
+            devices = await Device.findAndCountAll({
+                where: {brandId}, limit, offset,
+                order: [['price', 'ASC']],
+            })
         }
         if (!brandId && typeId) {
             devices = await Device.findAndCountAll({where: {typeId}, limit, offset})
         }
+        if (!brandId && typeId && expensive === 'expensive') {
+            devices = await Device.findAndCountAll({
+                where: {typeId}, limit, offset,
+                order: [['price', 'DESC']],
+            })
+        }
+        if (!brandId && typeId && cheap === 'cheap') {
+            devices = await Device.findAndCountAll({
+                where: {typeId}, limit, offset,
+                order: [['price', 'ASC']],
+            })
+        }
         if (brandId && typeId) {
             devices = await Device.findAndCountAll({where: {brandId, typeId}, limit, offset})
         }
+        if (brandId && typeId && expensive === 'expensive') {
+            devices = await Device.findAndCountAll({where: {brandId, typeId}, limit, offset,
+                order: [['price', 'DESC']],
+            })
+        }
+        if (brandId && typeId && cheap === 'cheap') {
+            devices = await Device.findAndCountAll({
+                where: {brandId, typeId}, limit, offset,
+                order: [['price', 'ASC']],
+            })
+        }
         return res.json(devices)
+
 
     }
 
@@ -103,7 +152,7 @@ class DeviceController {
                     })
                 )
                 return next(ApiError.success('Новые характеристики товара добавлены'))
-            } else  return next(ApiError.success('info=' + info + ' ,deviceId =' + deviceId))
+            } else return next(ApiError.success('info=' + info + ' ,deviceId =' + deviceId))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
@@ -119,12 +168,13 @@ class DeviceController {
                     DeviceInfo.update({
                         title: i[0].title,
                         description: i[0].description
-                    }, {where:{id:i[0].id}})
+                    }, {where: {id: i[0].id}})
                 )
-                if (info.length < 1) { return next(ApiError.success('В запросе не было данных для изменения'))}
+                if (info.length < 1) {
+                    return next(ApiError.success('В запросе не было данных для изменения'))
+                }
                 return next(ApiError.success('Изменения в инфо о товаре внесены'))
-            }
-            else return next(ApiError.success('В заголовке запроса нет info'))
+            } else return next(ApiError.success('В заголовке запроса нет info'))
         } catch (e) {
             next(ApiError.badRequest(e.message))
         }
@@ -139,7 +189,6 @@ class DeviceController {
             next(ApiError.badRequest(e.message))
         }
     }
-
 
 
 }

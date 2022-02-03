@@ -73,16 +73,17 @@ export const deleteDevice = async (id) => {
         console.log(e)
     }
 }
-export const fetchDevices = async (typeId, brandId, page, limit ) => {
+export const fetchDevices = async (typeId, brandId, page, limit, expensive, cheap ) => {
     try {
         const {data} = await $host.get('api/device', {params:{
-                typeId, brandId, page,limit
+                typeId, brandId, page,limit, expensive, cheap
             }} )
         return data
     } catch (e) {
         console.log(e)
     }
 }
+
 export const fetchOneDevice = async (id) => {
     try {
         const {data} = id !== undefined && await $host.get('api/device/' + id )
@@ -107,4 +108,7 @@ export const createInfo = async (info) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+export class fetchExpensiveDevices {
 }

@@ -19,7 +19,7 @@ const Shop = observer(() => {
     useEffect(() => {
         fetchTypes().then(data => device.setTypes(data))
         fetchBrands().then(data => device.setBrands(data))
-        fetchDevices(null, null, 1, 12).then(data => {
+        fetchDevices(null, null, 1, 12, sortOrder).then(data => {
             if (data === null || data === undefined) {
                 info.setInfoShop('Отсутствует связь с Базой Данных!')
                 info.setInfoShopVisible(true)
@@ -33,7 +33,7 @@ const Shop = observer(() => {
         })
     }, [])
     useEffect(() => {
-        fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit).then(data => {
+        fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit, sortOrder).then(data => {
             if (data === null || data === undefined) {
                 info.setInfoShop('Отсутствует связь с Базой Данных!')
                 info.setInfoShopVisible(true)
@@ -46,7 +46,7 @@ const Shop = observer(() => {
         fetchAllReviews().then(data => {
             reviews.setReviews(data)
         })
-    }, [device.page, device.selectedType, device.selectedBrand,])
+    }, [device.page, device.selectedType, device.selectedBrand, sortOrder])
 
     return (
         <Container>
