@@ -55,7 +55,7 @@ class DeviceController {
     }
 
     async getAll(req, res) {
-        let {brandId, typeId, limit, page, expensive, cheap} = req.query
+        let {brandId, typeId, limit, page, expensive} = req.query
         page = page || 1
         limit = limit || 9
         let offset = page * limit - limit
@@ -70,7 +70,13 @@ class DeviceController {
                 order: [['price', 'DESC']],
             })
         }
-        if (!brandId && !typeId && cheap === 'cheap') {
+        if (!brandId && !typeId && expensive === 'reviews') {
+            devices = await Device.findAndCountAll({
+                limit, offset,
+                order: [['rating', 'DESC']],
+            })
+        }
+        if (!brandId && !typeId && expensive === 'cheap') {
             devices = await Device.findAndCountAll({
                 limit, offset,
                 order: [['price', 'ASC']],
@@ -85,7 +91,13 @@ class DeviceController {
                 order: [['price', 'DESC']],
             })
         }
-        if (brandId && !typeId && cheap === 'cheap') {
+        if (brandId && !typeId && expensive === 'reviews') {
+            devices = await Device.findAndCountAll({
+                where: {brandId}, limit, offset,
+                order: [['rating', 'DESC']],
+            })
+        }
+        if (brandId && !typeId && expensive === 'cheap') {
             devices = await Device.findAndCountAll({
                 where: {brandId}, limit, offset,
                 order: [['price', 'ASC']],
@@ -100,7 +112,13 @@ class DeviceController {
                 order: [['price', 'DESC']],
             })
         }
-        if (!brandId && typeId && cheap === 'cheap') {
+        if (!brandId && typeId && expensive === 'reviews') {
+            devices = await Device.findAndCountAll({
+                where: {typeId}, limit, offset,
+                order: [['rating', 'DESC']],
+            })
+        }
+        if (!brandId && typeId && expensive === 'cheap') {
             devices = await Device.findAndCountAll({
                 where: {typeId}, limit, offset,
                 order: [['price', 'ASC']],
@@ -114,10 +132,16 @@ class DeviceController {
                 order: [['price', 'DESC']],
             })
         }
-        if (brandId && typeId && cheap === 'cheap') {
+        if (brandId && typeId && expensive === 'cheap') {
             devices = await Device.findAndCountAll({
                 where: {brandId, typeId}, limit, offset,
                 order: [['price', 'ASC']],
+            })
+        }
+        if (brandId && typeId && expensive === 'reviews') {
+            devices = await Device.findAndCountAll({
+                where: {brandId, typeId}, limit, offset,
+                order: [['rating', 'DESC']],
             })
         }
         return res.json(devices)
