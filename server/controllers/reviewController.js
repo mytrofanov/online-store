@@ -1,5 +1,6 @@
-const {Rating} = require('../models/models')
+const {Rating, Device} = require('../models/models')
 const ApiError = require('../error/ApiError')
+const {where} = require("sequelize");
 
 
 class ReviewController {
@@ -8,6 +9,15 @@ class ReviewController {
             let {rate, deviceId, userId, review} = req.body
             const rev = await Rating.create({rate, deviceId, userId, review})
             return res.json(rev)
+        } catch (e) {
+            return res.json(e)
+        }
+    }
+    async updateRating(req, res) {
+        try {
+            let {rating, id} = req.body
+            const newRate = await Device.update({rating}, {where: {id}})
+            return res.json(newRate)
         } catch (e) {
             return res.json(e)
         }

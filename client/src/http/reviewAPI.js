@@ -16,6 +16,14 @@ export const deleteReview = async (id) => {
         console.log(e)
     }
 }
+export const updateRating = async (rating) => {
+    try {
+        const {data} = await $authHost.post('api/review/rating', rating)
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+}
 export const fetchAllReviews = async () => {
     try {
         let {data} = await $host.get('api/review/get' )

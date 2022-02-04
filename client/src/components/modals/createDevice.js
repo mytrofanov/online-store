@@ -41,6 +41,7 @@ const CreateDevice = observer(({show, onHide, setInfoToShow,setInfoVisible }) =>
 
             })
             setInfoVisible(true)
+            setInfo([])
         } catch (e) {
             console.log(e)
         }
